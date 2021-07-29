@@ -1,29 +1,38 @@
 const bcrypt = require('bcrypt');
-const User = require('../../user')
-console.log('🚷 Entering user Validation')
+const db = require('../models/index')
 
 const validateNewUser = async (userData) => {
-  console.log('-------', userData, '-------');
-  const { password, firstName, lastName, email } = userData
-  try {
+  console.log('validation: 🚷 validating new user')
+  console.log(userData.email, userData.password)
+  const { password, firstname, lastname, email } = userData
+  if (email === '') throw new Error('missing email address?');
+  if (!firstname && !firstname >= 2) throw new Error('First Name must be bigger than 2 characters');
+  if (!lastname && !lastname >= 2) throw new Error('Last Name must be bigger than 2 characters');
+  if (password === '') throw new Error('missing password!');
+  // if (user.isModified('password')) {
+  const hashed = await encryptPw(password)
+  const newUser = ({
+    email,
+    password: hashed,
+    firstname,
+    lastname,
+  });
+  console.log('validation: ready with newUser', newUser);
+  return newUser;
+}
 
-    if (password === '') throw new Error('x');
-    const hash = await bcrypt.hash(password, 10);
-    if (!firstName || !firstName >= 2) return res.status(400).send('First Name must be bigger than 2 characters');
-    if (!lastName || !lastName >= 2) return res.status(400).send('Last Name must be bigger than 2 characters');
+const encryptPw = async (pw) => {
+  console.log('encrypting pw');
+  try {
+    const hash = await bcrypt.hash(pw, 10)
     console.log('bcrypt.hash=', hash)
-    const newUser = new User({
-      email,
-      password: hash,
-      firstName,
-      lastName,
-    });
-    return newUser
-  } catch (err) {
+    return hash
+    } catch (err) {
     console.log(err)
-    return err
+    throw new Error('Hashing Err:', err);
   }
 }
+
 
 const validateEmail = () => {
   //   Your User model should have an active attribute that is false by default
@@ -36,9 +45,14 @@ const validateEmail = () => {
 }
 
 const validateOldUser = async (user, password) => {
-  console.log('-------', user, password, '-------');
-  const validatedPass = await bcrypt.compare(password, user.password);
-  return validatedPass
-}
+  console.log('validation: 🚷 validating old user', user, password, '-------');
+  try {
+    const validatedPw = await bcrypt.compare(password, user.password);
+    return validatedPw
+  } catch (err) {
+    console.log("validation: 🚷 comparison ERR", err);
+    throw new Error('Hashing Comparison Err:', err);
+    }
+  }
 
 module.exports = { validateNewUser, validateOldUser }

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../models/index')
 const { validateNewUser, validateOldUser } = require('../utils/validate.user')
 
+
 function logme() {
   console.log('controller:                   🎮 entering user.controller *************');
 }
@@ -39,23 +40,24 @@ const getUserProfile = async (req, res) => {
 const addUser = async (req, res) => {
   logme()
   console.log('addUser')
-  const { email, password } = req.body;
+  const { email, password, firstname, lastname } = req.body;
   const user = await db.User.findOne({ where: {email: email}});
+ 
   if (user)
   return res
   .status(409)
   .send({ error: '409', message: '🐛 User already exists' });
   try {
-    // bcrypt.hash
-    // const newUser = await validateNewUser(req.body)
-
-    console.log('newUser Created OK')
-    const user = await db.User.create(req.body);
+    console.log('addUser: will soon bcrypting hash');
+     const newUser = await validateNewUser(req.body)
+     console.log('addUser: creating Validated newUser:', newUser);
+    const user = await db.User.create(newUser);
+    console.log('addUser: newUser Created:', user.toJSON())
     req.session.uid = user.id;
     res.status(201).send(user);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error, message: '🐛 Could not create user' });
+    res.status(400).send({ error, message: 'addUser: 🐛 Could not create user' });
   }
 };
 
