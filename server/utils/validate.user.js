@@ -44,10 +44,14 @@ const validateEmail = () => {
   //   Delete the hash from the database, it is no longer needed
 }
 
-const validateOldUser = async (user, password) => {
-  console.log('validation: 🚷 validating old user', user, password, '-------');
+const validateOldUser = async (user, email, password) => {
+  console.log('validation: 🚷 validating old user')
+  console.log(user.email, ' with ', email)
+  console.log(user.password, ' with ', password)
+  if (user.email !== email) return console.log('the correct email is ', user.email)
   try {
     const validatedPw = await bcrypt.compare(password, user.password);
+    validatedPw ? console.log('you passed') : console.log('you failed');
     return validatedPw
   } catch (err) {
     console.log("validation: 🚷 comparison ERR", err);

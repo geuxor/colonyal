@@ -63,15 +63,17 @@ const addUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   logme()
-  console.log('loginUser');
+  console.log('loginUser', req.body);
   try {
     const { email, password } = req.body;
-    const user = await db.User.findOne({ where: { email: email, password: password }});
-    console.log(user.email, user.password, 'found in DB!!!')
-      // bcrypt.compare
-    // const validatedPass = await validateOldUser(user, password)
-    // if (!validatedPass) throw new Error();
+    if (!email && !password) throw new Error('🐛 password or email is empty')
+    const user = await db.User.findOne({ where: { email: email }});
+    user ? console.log(user.email, 'found in DB!!!') : console.log(user, 'not found in DB!!!');
+    // bcrypt.compare
+    const validatedPass = await validateOldUser(user, email, password)
+    if (!validatedPass) throw new Error('🐛 password is incorrect - the correct one is:', user.password);
     req.session.uid = user.id;
+    console.log('loginUser: validated ok!!');
     res.status(200).send(user);
   } catch (error) {
     console.log(error);
