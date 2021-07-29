@@ -2,22 +2,19 @@ const bcrypt = require('bcrypt');
 const db = require('../models/index')
 const { validateNewUser, validateOldUser } = require('../utils/validate.user')
 
-
-// // Create instance
-// const jane = User.build({ firstName: "Jane", lastName: "Doe" });
-// await jane.save(); // save to database
-// // Shortcut for creating instance and saving to database at once
-// const jane = await User.create({ firstName: "Jane", lastName: "Doe" });
-console.log('entering user.controller');
+function logme() {
+  console.log('controller:                   🎮 entering user.controller *************');
+}
 
 const getUsers = async (req, res) => {
-  console.log('fetching All users');
+  logme()
+  console.log('getUsers');
   try {
     const users = await db.User.findAll();
-    console.log('-----', users);
-    // console.log(users.every(user => user instanceof User)); // true
+    console.log('   #', users.length, 'users found');
+    // console.log(users.every(user => user instanceof db.User)); // true
     // console.log("All users:", JSON.stringify(users, null, 2));
-    // users.row.forEach(m => m.timestamp = +m.timestamp)
+    users.forEach(m => console.log(m.email))
     res.status(200).send(users);
   } catch (err) {
     console.log(err);
@@ -25,21 +22,9 @@ const getUsers = async (req, res) => {
   }
 }
 
-// exports.post = async ctx => {
-//   const msg = ctx.request.body;
-//   try {
-//     await db.Message.create({
-//       authorId: msg.authorId,
-//       content: msg.content
-//     });
-//     ctx.status = 200;
-//   } catch (e) {
-//     ctx.status = 500;
-//     // Further handle your error on the back-end
-//   }
-// };
-
-const profile = async (req, res) => {
+const getUserProfile = async (req, res) => {
+  logme()
+  console.log('userProfile');
   try {
     // const { _id, firstName, lastName } = req.user;
     // const user = { _id, firstName, lastName };
@@ -51,9 +36,9 @@ const profile = async (req, res) => {
 
 };
 
-
-const create = async (req, res) => {
-  console.log('entering create controller')
+const addUser = async (req, res) => {
+  logme()
+  console.log('addUser')
   const { email, password } = req.body;
   const user = await db.User.findOne({ where: {email: email}});
   if (user)
@@ -70,12 +55,13 @@ const create = async (req, res) => {
     res.status(201).send(user);
   } catch (error) {
     console.log(error);
-    
     res.status(400).send({ error, message: '🐛 Could not create user' });
   }
 };
 
-const login = async (req, res) => {
+const loginUser = async (req, res) => {
+  logme()
+  console.log('loginUser');
   try {
     const { email, password } = req.body;
     const user = await db.User.findOne({ where: { email: email, password: password }});
@@ -94,9 +80,8 @@ const login = async (req, res) => {
 };
 
 
-const logout = (req, res) => {
-  console.log('entering logout');
-  
+const logoutUser = (req, res) => {
+  console.log('logoutUser');
   req.session.destroy((error) => {
     if (error) {
       res
@@ -104,10 +89,10 @@ const logout = (req, res) => {
         .send({ error, message: '🐛 Could not log out, please try again' });
     } else {
       res.clearCookie('sid');
+      console.log('sid destroyed!!');      
       res.sendStatus(200);
     }
   });
-
 };
 
-module.exports = { getUsers, create, login, logout };
+module.exports = { getUsers, addUser, loginUser, logoutUser, getUserProfile };

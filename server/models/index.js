@@ -29,16 +29,16 @@ const files = fs.readdirSync(__dirname);
 
 for (let file of files) {
   if (file !== 'index.js') {
-    console.log('xxxxxx', file);
+    console.log('Model file:', file);
     
     const modelCreation = require(path.join(__dirname, file)) 
     //`./${file}`)  //path.join(__dirname, file))(sequelize, sequelize.DataTypes);
-    console.log('modelCreation', modelCreation);
+    // console.log('modelCreation', modelCreation);
     const model = modelCreation(sequelize, DataTypes)
     db[model.name] = model;   //db.User
   }
 }
-console.log(db)
+console.log('db-index:', db)
 
 // for (const model in db) {
 //   if (db[model].associate) db[model].associate(db);

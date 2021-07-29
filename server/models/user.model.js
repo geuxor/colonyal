@@ -1,4 +1,4 @@
-console.log('entering user.model');
+console.log('model:                       🙋‍♂️ entering user.model');
 
 function UserModel(seq, types) {
 

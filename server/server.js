@@ -5,18 +5,18 @@ const router = require('./routers/router');
 const redis = require('redis')
 let RedisStore = require('connect-redis')(session)
 let redisClient = redis.createClient()
-// const cors = require('cors');
+const cors = require('cors');
 const SERVER_PORT = process.env.SERVER_PORT || 4001;
 const { sequelize } = require('./models/index')
 
 require('dotenv').config()
 
-// const corsConfig = {
-//   origin: process.env.CLIENT_ORIGIN,
-//   credentials: true,
-// };
+const corsConfig = {
+  origin: process.env.CLIENT_ORIGIN,
+  credentials: true,
+};
 
-// app.use(cors(corsConfig));
+app.use(cors(corsConfig));
 app.use(express.json());
 
 app.use(
@@ -35,37 +35,27 @@ app.use(
     },
   })
 );
-redisClient.on('error', console.error)
+redisClient.on('server: error', console.error)
+console.log(redisClient._events.data);
+
 
 app.use(router);
 app.get('*', (req, res) => {
-  res.status(404).send('Nothing found 🌵');
+  res.status(404).send('server ERR:                   🌵 Nothing found');
 });
 
 (async () => {
   try {
     await sequelize.sync({ alter: true });
-    console.log('database synced')
-    app.listen(4001, (err) => {  //SERVER_PORT
+    console.log('server:                       💽 database synced')
+    app.listen(process.env.SERVER_PORT, (err) => {  //SERVER_PORT
       if (err) {
-        console.log(`👽 Bad errors occuring! ${err}`); // eslint-disable-line no-console
+        console.log(`server ERR:          👽 Bad errors occuring! ${err}`); // eslint-disable-line no-console
       } else {
-        console.log(`🛰️ Server listening on port ${SERVER_PORT}!`); // eslint-disable-line no-console
+        console.log(`===========================   🛰️ Server listening on port ${process.env.SERVER_PORT}! =========================`); // eslint-disable-line no-console
       }
     })
   } catch (err) {
     console.log(err)
   }
 })();
-
-// const server =
-// app.listen(4002, (err) => {
-//   if (err) {
-//     console.log(`👽 Bad errors occuring! ${err}`); // eslint-disable-line no-console
-//   } else {
-//     console.log(`🛰️ Server is listening on port ${4002}!`); // eslint-disable-line no-console
-//   }
-// });
-
-
-// module.exports = server;
