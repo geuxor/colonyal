@@ -13,7 +13,6 @@ const getUsers = async (req, res) => {
   try {
     const users = await db.User.findAll();
     console.log('   #', users.length, 'users found');
-    // console.log(users.every(user => user instanceof db.User)); // true
     // console.log("All users:", JSON.stringify(users, null, 2));
     users.forEach(m => console.log(m.email))
     res.status(200).send(users);
@@ -27,8 +26,6 @@ const getUserProfile = async (req, res) => {
   logme()
   console.log('userProfile');
   try {
-    // const { _id, firstName, lastName } = req.user;
-    // const user = { _id, firstName, lastName };
     const user = req.user
     res.status(200).send(user);
   } catch {
