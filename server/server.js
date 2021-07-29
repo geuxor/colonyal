@@ -36,7 +36,7 @@ app.use(
   })
 );
 redisClient.on('server: error', console.error)
-console.log(redisClient._events.data);
+// console.log(redisClient._events.data);
 
 
 app.use(router);
@@ -48,7 +48,7 @@ app.get('*', (req, res) => {
   try {
     await sequelize.sync({ alter: true });
     console.log('server:                       💽 database synced')
-    app.listen(process.env.SERVER_PORT, (err) => {  //SERVER_PORT
+    app.listen(process.env.SERVER_PORT, (err) => {
       if (err) {
         console.log(`server ERR:          👽 Bad errors occuring! ${err}`); // eslint-disable-line no-console
       } else {

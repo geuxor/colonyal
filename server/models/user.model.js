@@ -31,9 +31,9 @@ function UserModel(seq, types) {
   }, {
     // {
     //   validate: {
-    //     bothCoordsOrNone: function () {
-    //       if ((this.latitude === null) !== (this.longitude === null)) {
-    //         throw new Error('Require either both latitude and longitude or neither')
+    //     emailcheck: function () {
+    //       if ((this.email === null)) {
+    //         throw new Error('Required')
     //       }
     //     }
     //   }
@@ -42,11 +42,3 @@ function UserModel(seq, types) {
 }
 
 module.exports = UserModel
-
-// try {
-//   await User.sync({ alter: true })
-// db.seq.sync({ alter: true }).then(() => {
-//   console.log('disconnecting...')
-// }).catch(e => {
-//   console.log(e)
-// })

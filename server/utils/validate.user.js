@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const db = require('../models/index')
 
 const validateNewUser = async (userData) => {
   console.log('validation: 🚷 validating new user')

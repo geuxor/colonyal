@@ -1,8 +1,3 @@
-// const redis_url = process.env.REDIS_URL || null;
-// const redis = require("redis");
-// const client = redis.createClient(redis_url);
-// const User = require('../../user');
-
 const db = require('../models/index')
 
 const authMiddleware = async (req, res, next) => {

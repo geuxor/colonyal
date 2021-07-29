@@ -5,12 +5,8 @@ const path = require('path');
 const db = {};
 require('dotenv').config()
 // const Pool = require('pg').Pool
-// const mongoose = reqduire('mongoose');
-// const DB_PORT = process.env.DB_PORT || 27017;
-// const DB_NAME = process.env.DB_NAME || 'authenticate';
 
-// Connect to database
-console.log('connecting to database')
+console.log('🧹 connecting to database')
 const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
   host: process.env.PGHOST,
   dialect: 'postgres',
@@ -23,7 +19,6 @@ const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, proc
   },
   // operatorsAliases: false // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
 });
-// console.log('🧹 trying to connect to DB');
 const files = fs.readdirSync(__dirname);
 // console.log('................', files);
 
@@ -32,13 +27,11 @@ for (let file of files) {
     console.log('Model file:', file);
     
     const modelCreation = require(path.join(__dirname, file)) 
-    //`./${file}`)  //path.join(__dirname, file))(sequelize, sequelize.DataTypes);
-    // console.log('modelCreation', modelCreation);
     const model = modelCreation(sequelize, DataTypes)
-    db[model.name] = model;   //db.User
+    db[model.name] = model;
   }
 }
-console.log('db-index:', db)
+// console.log('db-index:', db)
 
 // for (const model in db) {
 //   if (db[model].associate) db[model].associate(db);
@@ -48,7 +41,6 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
-
 
 // const pool = new Pool({
 //   user: process.env.PGUSER,
