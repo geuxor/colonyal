@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 function Navbar(props) {
   // const { auth } = useSelector((state) => ({ ...state }));
-  const auth = 'loggedin'
+  const auth = null
   //logout-
   // const logout = () => {
   //   dispatch({

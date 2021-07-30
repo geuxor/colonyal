@@ -3,9 +3,9 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 // components
-import Navbar from './components/Navigation/Navbar.component';
+import Navbar from './components/Navigation/Navbar.component'
+import Login from './auth/Login';
 
 function App() {
   return (
@@ -23,6 +23,9 @@ function App() {
           draggable
           pauseOnHover
         />
+        <Switch>
+          <Route exact path="/login" component={Login} />
+        </Switch>
       </BrowserRouter>
     </div>
   );
