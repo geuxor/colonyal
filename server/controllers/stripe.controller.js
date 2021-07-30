@@ -249,7 +249,8 @@ const getAccountBalance = async (req, res) => {
     // }
 
     console.log("BALANCE ===>", balance);
-    res.json(balance);
+    // res.send(balance)
+    res.json({ available: balance.available, pending: balance.pending});
   } catch (err) {
     console.log(err);
   }
