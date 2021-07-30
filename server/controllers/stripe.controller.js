@@ -143,7 +143,7 @@ async function createSessionId(req, res, next) {
       line_items: [{
         price_data: {
           product_data: {
-            name: 'Sex games'
+            name: 'games'
           },
           unit_amount: amount,
           currency: 'dkk'
@@ -180,12 +180,12 @@ async function createSessionId(req, res, next) {
 }
 // next(console.log('next here'))
 
-const updateDelayDays = async (accountId) => {
+const updateDelayDaysAPI = async (accountId) => {
   const account = await stripe.accounts.update(accountId, {
     settings: {
       payouts: {
         schedule: {
-          delay_days: 7,
+          delay_days: process.env.STRIPE_DELAY_DAYS,
         },
       },
     },
@@ -194,27 +194,37 @@ const updateDelayDays = async (accountId) => {
 };
 
 const getAccountStatus = async (req, res) => {
-  // console.log("GET ACCOUNT STATUS");
-  const user = await userModel.findById(req.user._id).exec();
+  console.log('********************* StripeController - getAccountStatus ****************', req.user.toJSON());
+  // const user = await db.User.findOne({ where: { email: email } });
+  const user = req.user
   const account = await stripe.accounts.retrieve(user.stripe_account_id);
-  // console.log("USER ACCOUNT RETRIEVE", account);
+  console.log("USER ACCOUNT RETRIEVED", account.toJSON());
   // update delay days
-  const updatedAccount = await updateDelayDays(account.id);
-  const updatedUser = await userModel.findByIdAndUpdate(
-    user._id,
+  const updatedAccount = await updateDelayDaysAPI(account.id);
+  // const userUpdateResult = await db.User.update(
+  //   { stripe_account_id: stripeAccount.id },
+  //   {
+  //     where: { id: user.id }
+  //   })
+  const updatedStripeData = await db.StripeData.update(
+    { charges_enabled: updatedAccount.stripe_seller.charges_enabled,
+      default_currency: updatedAccount.stripe_seller.default_currency,
+      country: updatedAccount.stripe_seller.country,
+      details_submitted: updatedAccount.stripe_seller.details_submitted,
+      payouts_enabled: updatedAccount.stripe_seller.payouts_enabled,
+      payout_schedule: updatedAccount.stripe_seller.payout_schedule.delay_days,
+      capabilities_card_payments: updatedAccount.stripe_seller.capabilities.card_payments,
+      capabilities_platform_payments: updatedAccount.stripe_seller.capabilities.platform_payments
+     },
     {
-      stripe_seller: updatedAccount,
-    },
-    { new: true } //allows updateUser to be updated with the new info
-  )
-    .select("-password") //removing pw from updateUser before sending to client
-    .exec();
-  // console.log(updatedUser);
+      where: { stripe_account_id: user.stripe_account_id }
+    })
+  console.log(updatedStripeData);
   res.json(updatedUser);
 };
 
 const getAccountBalance = async (req, res) => {
-  const user = await userModel.findById(req.user._id).exec();
+  const user = await userModel.findById(req.user._id)
   if (!user) return null;
   try {
     const balance = await stripe.balance.retrieve({
