@@ -270,7 +270,9 @@ const payoutSetting = async (req, res) => {
     console.log("LOGIN LINK FOR PAYOUT SETTING", loginLink);
     res.json(loginLink);
   } catch (err) {
-    console.log("STRIPE PAYOUT SETTING ERR ", err);
+    // console.log("STRIPE PAYOUT SETTING ERR ", err);
+    console.log("STRIPE PAYOUT SETTING ERR ", err.raw.message);
+    err.raw.message ? res.status(500).send(err.raw.message) : err
   }
 };
 
