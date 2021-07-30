@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const router = require('./routers/router');
+const router = require('./routers')
 const redis = require('redis')
 let RedisStore = require('connect-redis')(session)
 let redisClient = redis.createClient()
@@ -40,8 +40,11 @@ redisClient.on('server: error', console.error)
 
 
 app.use(router);
+// app.get('/stripe', (req, res) => {
+//   console.log('i found stripe!')
+// })
 app.get('*', (req, res) => {
-  res.status(404).send('server ERR:                   🌵 Nothing found');
+  res.status(404).send('server ERR:                   🌵 No Route found');
 });
 
 (async () => {
@@ -52,7 +55,7 @@ app.get('*', (req, res) => {
       if (err) {
         console.log(`server ERR:          👽 Bad errors occuring! ${err}`); // eslint-disable-line no-console
       } else {
-        console.log(`===========================   🛰️ Server listening on port ${process.env.SERVER_PORT}! =========================`); // eslint-disable-line no-console
+        console.log(`===========================   🛰️ Server listening on port ${process.env.SERVER_PORT}! =======================>>`); // eslint-disable-line no-console
       }
     })
   } catch (err) {

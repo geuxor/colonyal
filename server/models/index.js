@@ -6,7 +6,8 @@ const db = {};
 require('dotenv').config()
 // const Pool = require('pg').Pool
 
-console.log('🧹 connecting to database')
+
+console.log('dbconx:                       🧹 connecting to database')
 const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
   host: process.env.PGHOST,
   dialect: 'postgres',
@@ -25,7 +26,6 @@ const files = fs.readdirSync(__dirname);
 for (let file of files) {
   if (file !== 'index.js') {
     console.log('Model file:', file);
-    
     const modelCreation = require(path.join(__dirname, file)) 
     const model = modelCreation(sequelize, DataTypes)
     db[model.name] = model;
@@ -33,9 +33,9 @@ for (let file of files) {
 }
 // console.log('db-index:', db)
 
-// for (const model in db) {
-//   if (db[model].associate) db[model].associate(db);
-// }
+for (const model in db) {
+  if (db[model].associate) db[model].associate(db);
+}
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

@@ -26,6 +26,34 @@ function UserModel(seq, types) {
     email_active: {
       type: types.BOOLEAN,
     },
+    phone_number: {
+      type: types.INTEGER,
+      // trim: true
+    },
+    country: {
+      type: types.STRING
+    },
+    business_name: {
+      type: types.STRING
+    },
+    avatar: {
+      type: types.STRING
+    },
+    stripe_account_id: {
+      type: types.STRING,
+      unique: true
+    },
+    // stripe_seller: {
+    //   type: types.STRING
+    // },
+    // stripe_charges_enabled: {
+    //   type: types.STRING
+    // },
+
+    // stripeSession: {},
+    // stripe_registration_complete: {
+    //   type: types.BOOLEAN
+    // },
     timestamps: types.DATE
     // Sequelize.ENUM('value 1', 'value 2')
   }, {
@@ -40,5 +68,17 @@ function UserModel(seq, types) {
   });
   return User
 }
+UserModel.associate = function (models) {
+  User.hasOne(models.StripeData, {
+    foreignKey: 'stripe_account_id'
+  });
+};
+
 
 module.exports = UserModel
+
+// associate: (models) => {
+//   User.hasOne(models.Stripe, {
+//     foreignKey: 'stripe_acct_id',
+//   })
+// },

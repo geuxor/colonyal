@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const userController = require('../controllers/user.controller')
-const authMiddleware = require('../middlewares/auth');
+const authMiddleware = require('../middlewares/auth.mw');
 const messageController = require('../controllers/message.controller')
-console.log('router:                       💫 Entering Router');
+console.log('routes:                       💫 importing auth routes');
 
 router.post('/register', userController.addUser);
 router.get('/login', userController.loginUser);
