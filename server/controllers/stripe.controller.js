@@ -257,7 +257,7 @@ const getAccountBalance = async (req, res) => {
 };
 
 //is additional validation necessary if e.g. we want to transfer the payments?
-const payoutSetting = async (req, res) => {
+const getPayoutSetting = async (req, res) => {
   try {
     const user = req.user
     // const user = await userModel.findById(req.user._id).exec();
@@ -276,4 +276,4 @@ const payoutSetting = async (req, res) => {
   }
 };
 
-module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, payoutSetting }
+module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, getPayoutSetting }

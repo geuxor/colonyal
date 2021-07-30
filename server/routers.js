@@ -14,7 +14,7 @@ const stripeController = require('./controllers/stripe.controller')
 router.get('/stripe/connect-account', authMiddleware, stripeController.createConnectAccount)
 router.get("/stripe/account-status", authMiddleware, stripeController.getAccountStatus);
 router.get("/stripe/account-balance", authMiddleware, stripeController.getAccountBalance);
-router.get("/stripe/payout-setting", authMiddleware, stripeController.payoutSetting);
+router.get("/stripe/payout-setting", authMiddleware, stripeController.getPayoutSetting);
 
 //product routes
 
