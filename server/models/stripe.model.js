@@ -18,10 +18,10 @@ function StripeDataModel(seq, types) {
       type: types.BOOLEAN,
     },
     details_submitted: {
-      type: types.BOOLEAN
+      type: types.BOOLEAN,
     },
     payouts_enabled: {
-      type: types.BOOLEAN
+      type: types.BOOLEAN,
     },
     payout_schedule: {
       type: types.INTEGER,
@@ -40,6 +40,9 @@ function StripeDataModel(seq, types) {
     },
     default_currency: {
       type: types.STRING
+    },
+    fields_needed: {
+      type: types.ARRAY(types.STRING)
     },
     timestamps: types.DATE
   }, {

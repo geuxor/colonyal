@@ -197,34 +197,47 @@ const getAccountStatus = async (req, res) => {
   console.log('********************* StripeController - getAccountStatus ****************', req.user.toJSON());
   // const user = await db.User.findOne({ where: { email: email } });
   const user = req.user
-  const account = await stripe.accounts.retrieve(user.stripe_account_id);
-  console.log("USER ACCOUNT RETRIEVED", account.toJSON());
-  // update delay days
-  const updatedAccount = await updateDelayDaysAPI(account.id);
-  // const userUpdateResult = await db.User.update(
-  //   { stripe_account_id: stripeAccount.id },
-  //   {
-  //     where: { id: user.id }
-  //   })
-  const updatedStripeData = await db.StripeData.update(
-    { charges_enabled: updatedAccount.stripe_seller.charges_enabled,
-      default_currency: updatedAccount.stripe_seller.default_currency,
-      country: updatedAccount.stripe_seller.country,
-      details_submitted: updatedAccount.stripe_seller.details_submitted,
-      payouts_enabled: updatedAccount.stripe_seller.payouts_enabled,
-      payout_schedule: updatedAccount.stripe_seller.payout_schedule.delay_days,
-      capabilities_card_payments: updatedAccount.stripe_seller.capabilities.card_payments,
-      capabilities_platform_payments: updatedAccount.stripe_seller.capabilities.platform_payments
-     },
-    {
-      where: { stripe_account_id: user.stripe_account_id }
-    })
-  console.log(updatedStripeData);
-  res.json(updatedUser);
+  try {
+    const account = await updateDelayDaysAPI(user.stripe_account_id);
+    // console.log("USER ACCOUNT UPDATED with 7 days payout >>>>>>>>>>>>>>>>>>>>>>", updatedAccount);
+    // const account = await stripe.accounts.retrieve(user.stripe_account_id);
+    console.log("USER ACCOUNT Updated and RETRIEVED >>>>>>>>>>>>>>>>>>>>>>", account);
+    // update delay days
+    // const userUpdateResult = await db.User.update(
+    //   { stripe_account_id: stripeAccount.id },
+    //   {
+    //     where: { id: user.id }
+    //   })
+    console.log(typeof account.charges_enabled);
+
+    const updatedStripeData = await db.StripeData.update(
+      {
+        charges_enabled: account.charges_enabled,
+        details_submitted: account.details_submitted,
+        payouts_enabled: account.payouts_enabled,
+        default_currency: account.default_currency,
+        country: account.country,
+        payout_schedule: account.payout_schedule.delay_days,
+        capabilities_card_payments: account.capabilities.card_payments,
+        capabilities_platform_payments: account.capabilities.platform_payments,
+        fields_needed: account.verification.fields_needed
+      },
+      {
+        where: { stripe_account_id: user.stripe_account_id }
+      })
+    console.log('updatedStripeData', account);
+    //how to pass the obj to the client
+    res.status(200).send({ account });
+    // res.send(Buffer.from(updatedStripeData))
+  } catch (err) {
+    console.log(err)
+    res.status(500).send(err);
+  }
 };
 
 const getAccountBalance = async (req, res) => {
-  const user = await userModel.findById(req.user._id)
+  const user = req.user
+  // const user = await userModel.findById(req.user._id)
   if (!user) return null;
   try {
     const balance = await stripe.balance.retrieve({
@@ -242,10 +255,11 @@ const getAccountBalance = async (req, res) => {
   }
 };
 
+//is additional validation necessary if e.g. we want to transfer the payments?
 const payoutSetting = async (req, res) => {
   try {
-    const user = await userModel.findById(req.user._id).exec();
-
+    const user = req.user
+    // const user = await userModel.findById(req.user._id).exec();
     const loginLink = await stripe.accounts.createLoginLink(
       user.stripe_account_id,
       {
