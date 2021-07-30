@@ -5,7 +5,7 @@ console.log('routes:                       💫 importing routes');
 //auth routes
 const userController = require('./controllers/user.controller')
 router.post('/register', userController.addUser);
-router.get('/login', userController.loginUser);
+router.post('/login', userController.loginUser);
 router.get('/users', authMiddleware, userController.getUsers);
 router.get('/logout', authMiddleware, userController.logoutUser);
 router.get('/profile', authMiddleware, userController.getUserProfile);
@@ -20,7 +20,7 @@ router.get("/stripe/payout-setting", authMiddleware, stripeController.getPayoutS
 //product routes
 
 const productController = require('./controllers/product.controller')
-const productOwner = require('../middlewares/product.mw')
+// const productOwner = require('../middlewares/product.mw')
 const multer = require('multer');
 const upload = multer({ dest: '/tmp/' });
 

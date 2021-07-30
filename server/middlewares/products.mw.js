@@ -1,12 +1,12 @@
-const multer = require('multer');
-const fs = require('fs');
-const upload = multer({ dest: './tmp/' });
+// const multer = require('multer');
+// const fs = require('fs');
+// const upload = multer({ dest: './tmp/' });
 
 console.log('                                 🚽 entering productMiddelWare')
-console.log('with userid:', req.user.id);
-console.log('with headers:', req.rawHeaders);
 
 const productCreatedby = async (req, res, next) => {
+  console.log('with userid:', req.user.id);
+  console.log('with headers:', req.rawHeaders);
   try {
     const file = global.appRoot + '/uploads/' + req.file.filename;
     console.log(file);

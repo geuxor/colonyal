@@ -12,7 +12,7 @@ const { sequelize } = require('./models/index')
 require('dotenv').config()
 
 const corsConfig = {
-  origin: process.env.CLIENT_ORIGIN,
+  origin: 'http://localhost:3000', //process.env.CLIENT_ORIGIN,
   credentials: true,
 };
 

@@ -38,16 +38,16 @@ const addUser = async (req, res) => {
   logme()
   console.log('addUser')
   const { email, password, firstname, lastname } = req.body;
-  const user = await db.User.findOne({ where: {email: email}});
- 
+  const user = await db.User.findOne({ where: { email: email } });
+
   if (user)
-  return res
-  .status(409)
-  .send({ error: '409', message: '🐛 User already exists' });
+    return res
+      .status(409)
+      .send({ error: '409', message: '🐛 User already exists' });
   try {
     console.log('addUser: will soon bcrypting hash');
-     const newUser = await validateNewUser(req.body)
-     console.log('addUser: creating Validated newUser:', newUser);
+    const newUser = await validateNewUser(req.body)
+    console.log('addUser: creating Validated newUser:', newUser);
     const user = await db.User.create(newUser);
     console.log('addUser: newUser Created:', user.toJSON())
     req.session.uid = user.id;
@@ -64,8 +64,12 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email && !password) throw new Error('🐛 password or email is empty')
-    const user = await db.User.findOne({ where: { email: email }});
-    user ? console.log(user.email, 'found in DB!!!') : console.log(user, 'not found in DB!!!');
+    const user = await db.User.findOne({ where: { email: email } });
+    if (!user) {
+      console.log(user, 'not found in DB!!!');
+      res.status(403).send('🐛 User not Found!');
+    }
+    console.log(user.email, 'found in DB!!!')
     // bcrypt.compare
     const validatedPass = await validateOldUser(user, email, password)
     if (!validatedPass) throw new Error('🐛 password is incorrect - the correct one is:', user.password);
@@ -90,7 +94,7 @@ const logoutUser = (req, res) => {
         .send({ error, message: '🐛 Could not log out, please try again' });
     } else {
       res.clearCookie('sid');
-      console.log('sid destroyed!!');      
+      console.log('sid destroyed!!');
       res.sendStatus(200);
     }
   });
