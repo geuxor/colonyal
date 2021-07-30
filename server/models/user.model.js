@@ -72,6 +72,9 @@ UserModel.associate = function (models) {
   User.hasOne(models.StripeData, {
     foreignKey: 'stripe_account_id'
   });
+  User.hasMany(models.Product, {
+    foreignKey: 'product_id'
+  });
 };
 
 
