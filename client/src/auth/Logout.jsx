@@ -1,30 +1,38 @@
+import { get_cookie, delete_cookie } from "../utils/cookieHandler";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import apiService from "../ApiService/auth";
 import { toast } from "react-toastify";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-export const Logout = async () => {
+// export const Logout = async () => {
+function Logout() {
   console.log("LOGOUT");
-  const dispatch = useDispatch();
   const history = useHistory();
-  
-  // useEffect
-  try {
-    let res = await apiService.logout();
-    console.log("logout response", res);
-    // if (res) {  //&& res.data
-    dispatch({
-      type: "LOGOUT",
-      // payload: null,
-    });
-    history.push("/login");
-    // }
-  } catch (err) {
-    console.log(err);
-    if (err.response && err.response.status >= 400)
-      toast.error(err.response.data);
-  }
+  const dispatch = useDispatch();
 
-  history.push("/login");
-};
+  useEffect((dispatch, history) => {
+    (async () => {
+      try {
+        console.log("logged out?-----------------");
+        delete_cookie(get_cookie());
+        let res = await apiService.logout();
+        console.log("logout response", res);
+        dispatch({
+          type: "LOGOUT",
+        });
+
+        history.push("/login");
+      } catch (err) {
+        console.log("Error fetching users:", err.response.data);
+        // history.push("/login");
+        if (err.response && err.response.status >= 400)
+          toast.error(err.response.data);
+      }
+    })();
+  }, []);
+  return history.push("/login");
+}
+// const { auth } = useSelector((state) => state); //(state) => ({ ...state })
+
+export default Logout;

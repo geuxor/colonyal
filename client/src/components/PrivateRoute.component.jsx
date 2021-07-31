@@ -1,13 +1,10 @@
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isLogin } from "../utils/auth"
-import Admin from './Admin/Admin.component';
-
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   //  isAuthenticated ? (
   const { loggedIn } = useSelector((state) => ({ ...state }));
-
+console.log('privateRoute loggedIn?', loggedIn);
   // return auth && auth.token ? <Route {...rest} /> : <Redirect to="/login" />;
   return (
     <Route

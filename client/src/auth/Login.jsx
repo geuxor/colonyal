@@ -1,3 +1,4 @@
+import { get_cookie } from '../utils/cookieHandler'
 import { useState } from "react";
 import { toast } from "react-toastify";
 import apiService from "../ApiService/auth";
@@ -23,17 +24,19 @@ const Login = ({ history }) => {
         console.log("LOGGIN SUCCESSFULL ===> ");
         console.log(res.data);
         //cookie read
-        const cookie = ("document.cookie", document.cookie);
-        console.log(cookie);
-        // save log in state to redux
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: res.data,
-          // user: res.data
-          // payload: `${res.data}=+truelg`,
-        });
+        const mycookie = get_cookie()
+        console.log("newcookie", mycookie);
+        if (mycookie) {
+          // save log in state to redux
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: res.data,
+          });
+          history.push("/admin");
+        } else {
+          toast.error('Error logging in');
+        }
         
-        history.push("/admin");
       }
     } catch (err) {
       console.log(err);

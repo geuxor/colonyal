@@ -13,13 +13,12 @@ import { authReducer } from './reducers/auth'
 import Navbar from './components/Navigation/Navbar.component'
 import Login from './auth/Login';
 import Admin from './components/Admin/Admin.component';
-import { Logout } from './auth/Logout';
+import Logout from './auth/Logout';
+import Register from './auth/Register';
 
 function App() {
   const user = useSelector((state) => state.user);
   console.log('user is', user);
-
-  
 
   return (
     <div className="App">
@@ -40,6 +39,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/admin" component={Admin} />
           <Route exact path="/logout" component={Logout} />
+          <Route exact path="/register" component={Register} />
           <Redirect from="/" to="/" exact />
         </Switch>
       </BrowserRouter>

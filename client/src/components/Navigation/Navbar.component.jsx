@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-
+import { Logout } from "../../auth/Logout"
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   console.log("Navbar: user is", user);
@@ -13,23 +13,6 @@ const Navbar = () => {
   // const initialState = auth.isAuthenticated();
   // const [isAuthenticated, setIsAuthenticated] = useState(true);
   // isAuthenticated=true
-
-  const history = useHistory();
-  const dispatch = useDispatch();
-  // const { auth } = useSelector((state) => state); //(state) => ({ ...state })
-  // //logout-
-  const logout = async () => {
-    try {
-    await apiService.logout();
-    dispatch({
-      type: "LOGOUT",
-      payload: null,
-    });
-    history.push("/login");
-  } catch(err) {
-    console.log(err);
-  }
-};
 
   // console.log(JSON.stringify(auth));
 
@@ -52,9 +35,9 @@ const Navbar = () => {
           <Link className="nav-link m-2" to="/dashboard">
             Dashboard
           </Link>
-          <button onClick={logout} className="nav-link">
+          <Link className="nav-link m-2" to="/logout">
             Logout
-          </button>
+          </Link>
         </>
       ) : (
         <>
@@ -81,3 +64,6 @@ export default Navbar;
 // )}
 
 // <Link to="/logout">Logout</Link>;
+          // <button onClick={Logout} className="nav-link">
+          //   Logout
+          // </button>;

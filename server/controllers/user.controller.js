@@ -48,7 +48,7 @@ const getUserProfile = async (req, res) => {
 
 const addUser = async (req, res) => {
   logme()
-  console.log('addUser')
+  console.log('addUser', req.body)
   const { email, password, firstname, lastname } = req.body;
   const user = await db.User.findOne({ where: { email: email } });
 
@@ -101,6 +101,9 @@ const loginUser = async (req, res) => {
 
 const logoutUser = (req, res) => {
   console.log('logoutUser');
+  setTimeout(() => {
+    console.log('waiting...')
+  
   req.session.destroy((error) => {
     if (error) {
       res
@@ -109,9 +112,10 @@ const logoutUser = (req, res) => {
     } else {
       res.clearCookie('sid');
       console.log('sid destroyed!!');
-      res.sendStatus(200);
+      res.sendStatus(200) //.send('CLEARED');
     }
   });
+  }, 3000);
 };
 
 module.exports = { getUsers, addUser, loginUser, logoutUser, getUserProfile };

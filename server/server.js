@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
-    name: 'sid',
+    name: 'sid%colon',
     saveUninitialized: false,
     resave: false,
     secret: process.env.SECRET || '*&^%$£$%TYUJIKL?<HDTYUKO<MKNBFE£$R%T^Y&UJNBFW',

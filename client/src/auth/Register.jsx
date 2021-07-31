@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import RegisterForm from "../components/RegisterForm.component";
 import { toast } from "react-toastify";
-import { registerUser } from "../actions/auth";
+import apiService from "../ApiService/auth"
 
 // function App() {
 //   const notify = () => toast("Wow so easy!");
@@ -16,7 +16,8 @@ import { registerUser } from "../actions/auth";
 // }
 
 function Register({ history }) {
-  const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,8 +26,9 @@ function Register({ history }) {
     // console.table({ username, email, password })
     // if (!username || !email || !password) return console.log('error')
     try {
-      const res = await registerUser({
-        username,
+      const res = await apiService.registerUser({
+        firstname,
+        lastname,
         email,
         password,
       });
@@ -54,11 +56,13 @@ function Register({ history }) {
           <div className="col-md-6 offset-md-3">
             <RegisterForm
               saveUser={saveUser}
-              username={username}
+              firstname={firstname}
+              setFirstname={setFirstname}
+              lastname={lastname}
+              setLastname={setLastname}
               password={password}
-              email={email}
-              setUsername={setUsername}
               setPassword={setPassword}
+              email={email}
               setEmail={setEmail}
             />
           </div>

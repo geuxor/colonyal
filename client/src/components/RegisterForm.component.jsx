@@ -2,8 +2,10 @@ import React from "react";
 
 function RegisterForm({
   saveUser,
-  username,
-  setUsername,
+  firstname,
+  lastname,
+  setFirstname,
+  setLastname,
   email,
   setEmail,
   password,
@@ -12,13 +14,23 @@ function RegisterForm({
   return (
     <form onSubmit={saveUser}>
       <div className="form-group m-3">
-        <label className="form-label">Your Name</label>
+        <label className="form-label">First Name</label>
         <input
           type="text"
           className="form-control"
           placeholder="Enter Name"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+        />
+      </div>
+      <div className="form-group m-3">
+        <label className="form-label">Last Name</label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter Name"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
         />
       </div>
       <div className="form-group m-3">
@@ -42,7 +54,7 @@ function RegisterForm({
         />
       </div>
       <button
-        disabled={!email || !password || !username}
+        disabled={!email || !password || !firstname || !lastname }
         type="submit"
         className="btn btn-primary"
       >

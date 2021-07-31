@@ -8,7 +8,7 @@ router.post('/register', userController.addUser);
 router.post('/login', userController.loginUser);
 // router.get('/status', authMiddleware, userController.getStatus);
 router.get('/users', authMiddleware, userController.getUsers);
-router.get('/logout', authMiddleware, userController.logoutUser);
+router.get('/logout', userController.logoutUser);
 router.get('/profile', authMiddleware, userController.getUserProfile);
 
 //stripe routes
