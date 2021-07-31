@@ -6,6 +6,7 @@ console.log('routes:                       💫 importing routes');
 const userController = require('./controllers/user.controller')
 router.post('/register', userController.addUser);
 router.post('/login', userController.loginUser);
+// router.get('/status', authMiddleware, userController.getStatus);
 router.get('/users', authMiddleware, userController.getUsers);
 router.get('/logout', authMiddleware, userController.logoutUser);
 router.get('/profile', authMiddleware, userController.getUserProfile);

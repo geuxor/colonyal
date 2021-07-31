@@ -1,19 +1,35 @@
+import apiService from "../../ApiService/auth"
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-function Navbar(props) {
-  // const { auth } = useSelector((state) => ({ ...state }));
-  const auth = null
-  //logout-
-  // const logout = () => {
-  //   dispatch({
-  //     type: "LOGOUT",
-  //     payload: null,
-  //   });
-  //   window.localStorage.removeItem("auth");
-  //   // history.push("/login");
-  // };
+const Navbar = () => {
+  const user = useSelector((state) => state.user);
+  console.log("Navbar: user is", user);
+
+  // const Navbar = ({ isAuthenticated }) => {
+  // console.log("isAuthenticated", isAuthenticated);
+  // const initialState = auth.isAuthenticated();
+  // const [isAuthenticated, setIsAuthenticated] = useState(true);
+  // isAuthenticated=true
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+  // const { auth } = useSelector((state) => state); //(state) => ({ ...state })
+  // //logout-
+  const logout = async () => {
+    try {
+    await apiService.logout();
+    dispatch({
+      type: "LOGOUT",
+      payload: null,
+    });
+    history.push("/login");
+  } catch(err) {
+    console.log(err);
+  }
+};
 
   // console.log(JSON.stringify(auth));
 
@@ -22,7 +38,7 @@ function Navbar(props) {
       <Link className="nav-link" to="/">
         Home
       </Link>
-      {auth !== null && (
+      {user ? (
         <>
           <Link className="nav-link p-2" to="/stripe/callback">
             stripeCallback
@@ -36,13 +52,11 @@ function Navbar(props) {
           <Link className="nav-link m-2" to="/dashboard">
             Dashboard
           </Link>
-          <Link className="nav-link p-2" to="/login" href="/login">
+          <button onClick={logout} className="nav-link">
             Logout
-          </Link>
+          </button>
         </>
-      )}
-
-      {auth === null && (
+      ) : (
         <>
           <Link className="nav-link" to="/">
             Products
@@ -57,8 +71,13 @@ function Navbar(props) {
       )}
     </div>
   );
-}
+};
 
 export default Navbar;
 
 // Logout {//JSON.stringify(auth.user.username)}
+// {isAuthenticated ? (
+//         ) : (
+// )}
+
+// <Link to="/logout">Logout</Link>;

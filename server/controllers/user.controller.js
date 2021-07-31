@@ -7,6 +7,18 @@ function logme() {
   console.log('controller:                   🎮 entering user.controller *************');
 }
 
+// const getStatus = async (req, res) => {
+//   logme()
+//   console.log('### getStatus');
+//   try {
+//     const user = req.user
+//     res.status(200).send(user);
+//   } catch (err) {
+//     console.log(err, '🐛 User not found' );
+//     res.status(404).send(false);
+//   }
+// };
+
 const getUsers = async (req, res) => {
   logme()
   console.log('getUsers');
@@ -65,17 +77,19 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
     if (!email && !password) throw new Error('🐛 password or email is empty')
     const user = await db.User.findOne({ where: { email: email } });
+    // console.log(user.toJSON());
+    
     if (!user) {
       console.log(user, 'not found in DB!!!');
       res.status(403).send('🐛 User not Found!');
     }
-    console.log(user.email, 'found in DB!!!')
+    console.log('email found in DB!!!') //user.toJSON().email,
     // bcrypt.compare
     const validatedPass = await validateOldUser(user, email, password)
-    if (!validatedPass) throw new Error('🐛 password is incorrect - the correct one is:', user.password);
+    if (!validatedPass) throw new Error('🐛 password is incorrect');
     req.session.uid = user.id;
-    console.log('loginUser: validated ok!!');
-    res.status(200).send(user);
+    console.log('loginUser: validated ok!!', user.email);
+    res.status(200).send(user.email);
   } catch (error) {
     console.log(error);
     res
