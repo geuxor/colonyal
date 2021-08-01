@@ -86,9 +86,9 @@ async function createConnectAccount(req, res, next) {
         db.StripeData.stripe_account_id ? response = 'ok' : ''
         console.log('###### StripeData updated with', stripeUpdateResult.stripe_account_id, 'and user', stripeUpdateResult.stripe_user_id, '====>', response)
       }
-    } else {
-      console.log('ERR ---> Stripe Account Already Created')
-      return res.status(401).send('ERR ---> Stripe Account Already Created')
+      // } else {
+      //   console.log('ERR ---> Stripe Account Already Created')
+      //   return res.status(401).send('ERR ---> Stripe Account Already Created')
     }
     //calling strip onboarding link creation 
     console.log('###### createStripeAccountLink');
@@ -208,26 +208,33 @@ const getAccountStatus = async (req, res) => {
     //   {
     //     where: { id: user.id }
     //   })
-    console.log(typeof account.charges_enabled);
+    // console.log(typeof account.charges_enabled);
+    // const { charges_enabled, details_submitted, payouts_enabled, default_currency, country, capabilities_card_payments, capabilities_platform_payments } = account
+    const stripeDBdata = {
+      charges_enabled: account.charges_enabled,
+      details_submitted: account.details_submitted,
+      payouts_enabled: account.payouts_enabled,
+      default_currency: account.default_currency,
+      country: account.country,
+      payout_schedule: account.payout_schedule.delay_days,
+      capabilities_card_payments: account.capabilities.card_payments,
+      capabilities_platform_payments: account.capabilities.platform_payments,
+      fields_needed: account.verification.fields_needed,
+      payout_schedule: account.payout_schedule.delay_days,
+      fields_needed: account.verification.fields_needed
+    }
+    console.log('--------', stripeDBdata)
 
-    const updatedStripeData = await db.StripeData.update(
+    const updatedStripeData = await db.StripeData.update(stripeDBdata,
       {
-        charges_enabled: account.charges_enabled,
-        details_submitted: account.details_submitted,
-        payouts_enabled: account.payouts_enabled,
-        default_currency: account.default_currency,
-        country: account.country,
-        payout_schedule: account.payout_schedule.delay_days,
-        capabilities_card_payments: account.capabilities.card_payments,
-        capabilities_platform_payments: account.capabilities.platform_payments,
-        fields_needed: account.verification.fields_needed
-      },
-      {
-        where: { stripe_account_id: user.stripe_account_id }
+        where: { stripe_account_id: user.stripe_account_id },
+        returning: true,
+        plain: true
       })
-    console.log('updatedStripeData', account);
+    console.log('updatedStripeData', updatedStripeData[1].dataValues);
     //how to pass the obj to the client
-    res.status(200).send({ account });
+    res.status(200).send(updatedStripeData[1])
+    // res.status(200).send(stripeDBdata);
     // res.send(Buffer.from(updatedStripeData))
   } catch (err) {
     console.log(err)
@@ -238,19 +245,39 @@ const getAccountStatus = async (req, res) => {
 const getAccountBalance = async (req, res) => {
   const user = req.user
   // const user = await userModel.findById(req.user._id)
+  console.log('stripe-controller: fetching stripe account balance', user.toJSON())
   if (!user) return null;
   try {
     const balance = await stripe.balance.retrieve({
       stripe_account: user.stripe_account_id, //stripeAccount
     });
+    console.log('balance is now::: ', balance.pending)
+    //how to define schema for array of objects???
+    const updatedStripeBalance = await db.StripeData.update(
+      {
+        balance_pending_amount: balance.pending[0].amount,
+        balance_pending_curr: balance.pending[0].currency
+      },
+      {
+        where: { stripe_account_id: user.stripe_account_id },
+        returning: true,
+        plain: true
+      })
     //   .then(({ pending }) => (
     // {
     //   pending: pending[0].amount,
     // }
 
-    console.log("BALANCE ===>", balance);
+    console.log("BALANCE ===>", updatedStripeBalance[1].dataValues);
     // res.send(balance)
-    res.json({ available: balance.available, pending: balance.pending});
+    res.json(updatedStripeBalance)
+    // res.json({ available: balance.available, pending: balance.pending });
+    // res.json(
+    //   {
+    //     balance_pending_amount: balance.pending[0].amount,
+    //     balance_pending_curr: balance.pending[0].currency
+    //   })
+    // res.status(200).send(balance)
   } catch (err) {
     console.log(err);
   }

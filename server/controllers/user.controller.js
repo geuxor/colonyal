@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const db = require('../models/index')
 const { validateNewUser, validateOldUser } = require('../utils/validate.user')
 
@@ -6,6 +6,18 @@ const { validateNewUser, validateOldUser } = require('../utils/validate.user')
 function logme() {
   console.log('controller:                   🎮 entering user.controller *************');
 }
+
+// const getStatus = async (req, res) => {
+//   logme()
+//   console.log('### getStatus');
+//   try {
+//     const user = req.user
+//     res.status(200).send(user);
+//   } catch (err) {
+//     console.log(err, '🐛 User not found' );
+//     res.status(404).send(false);
+//   }
+// };
 
 const getUsers = async (req, res) => {
   logme()
@@ -24,10 +36,11 @@ const getUsers = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
   logme()
-  console.log('userProfile');
+  console.log('getuserProfile');
   try {
     const user = req.user
-    res.status(200).send(user);
+    const {email, firstname, lastname, createdAt} = user
+    res.status(200).send({ email, firstname, lastname, createdAt });
   } catch {
     res.status(404).send({ error, message: '🐛 User not found' });
   }
@@ -36,7 +49,7 @@ const getUserProfile = async (req, res) => {
 
 const addUser = async (req, res) => {
   logme()
-  console.log('addUser')
+  console.log('addUser', req.body)
   const { email, password, firstname, lastname } = req.body;
   const user = await db.User.findOne({ where: { email: email } });
 
@@ -65,17 +78,19 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
     if (!email && !password) throw new Error('🐛 password or email is empty')
     const user = await db.User.findOne({ where: { email: email } });
+    // console.log(user.toJSON());
+    
     if (!user) {
       console.log(user, 'not found in DB!!!');
       res.status(403).send('🐛 User not Found!');
     }
-    console.log(user.email, 'found in DB!!!')
+    console.log('email found in DB!!!') //user.toJSON().email,
     // bcrypt.compare
     const validatedPass = await validateOldUser(user, email, password)
-    if (!validatedPass) throw new Error('🐛 password is incorrect - the correct one is:', user.password);
+    if (!validatedPass) throw new Error('🐛 password is incorrect');
     req.session.uid = user.id;
-    console.log('loginUser: validated ok!!');
-    res.status(200).send(user);
+    console.log('loginUser: validated ok!!', user.email);
+    res.status(200).send(user.email);
   } catch (error) {
     console.log(error);
     res
@@ -87,6 +102,9 @@ const loginUser = async (req, res) => {
 
 const logoutUser = (req, res) => {
   console.log('logoutUser');
+  setTimeout(() => {
+    console.log('waiting...')
+  
   req.session.destroy((error) => {
     if (error) {
       res
@@ -95,9 +113,10 @@ const logoutUser = (req, res) => {
     } else {
       res.clearCookie('sid');
       console.log('sid destroyed!!');
-      res.sendStatus(200);
+      res.sendStatus(200) //.send('CLEARED');
     }
   });
+  }, 3000);
 };
 
 module.exports = { getUsers, addUser, loginUser, logoutUser, getUserProfile };

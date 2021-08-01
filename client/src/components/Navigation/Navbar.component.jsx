@@ -1,28 +1,21 @@
+import { useSelector } from "react-redux";
 import React from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
+import { Button } from "reactstrap";
+import { useLogOut } from "../../auth/Logout";
 
-function Navbar(props) {
-  // const { auth } = useSelector((state) => ({ ...state }));
-  const auth = null
-  //logout-
-  // const logout = () => {
-  //   dispatch({
-  //     type: "LOGOUT",
-  //     payload: null,
-  //   });
-  //   window.localStorage.removeItem("auth");
-  //   // history.push("/login");
-  // };
-
-  // console.log(JSON.stringify(auth));
-
+const Navbar = () => {
+  const loggedIn = useSelector((state) => state.loggedIn);
+  console.log("Navbar: user is", loggedIn);
+  const { logoutUser } = useLogOut();
+    //  const dispatch = useDispatch();
+ 
   return (
     <div className="nav bg-light d-flex justify-content-center">
       <Link className="nav-link" to="/">
         Home
       </Link>
-      {auth !== null && (
+      {loggedIn ? (
         <>
           <Link className="nav-link p-2" to="/stripe/callback">
             stripeCallback
@@ -33,16 +26,27 @@ function Navbar(props) {
           <Link className="nav-link p-2" to="/admin">
             Admin
           </Link>
-          <Link className="nav-link m-2" to="/dashboard">
+          <Link className="nav-link m-2" to="/dashboard/buyer">
             Dashboard
           </Link>
-          <Link className="nav-link p-2" to="/login" href="/login">
-            Logout
+          <Link className="nav-link" to="/stripe/callback">
+            StripeCallback
           </Link>
-        </>
-      )}
 
-      {auth === null && (
+          <Button
+            className="nav-link m-2"
+            component={NavLink}
+            color="white"
+            to="/logout"
+            // here now you can safely logout user since no hooks are being called
+            onClick={function () {
+              logoutUser();
+            }}
+          >
+            Logout
+          </Button>
+        </>
+      ) : (
         <>
           <Link className="nav-link" to="/">
             Products
@@ -53,12 +57,44 @@ function Navbar(props) {
           <Link className="nav-link" to="/register">
             Register
           </Link>
+          <Link className="nav-link" to="/stripe/callback">
+            StripeCallback
+          </Link>
         </>
       )}
     </div>
   );
-}
+};
 
 export default Navbar;
 
-// Logout {//JSON.stringify(auth.user.username)}
+// <Link to="/logout">Logout</Link>;
+// <button onClick={Logout} className="nav-link">
+//   Logout
+// </button>;
+
+  //Logout Function
+  // const logout = useLogout();
+  // const history = useHistory();
+  // const dispatch = useDispatch();
+
+  // const Logout = async () => {
+  //   console.log("LOGOUT");
+
+  //   try {
+  //     console.log("logged out?-----------------");
+  //     delete_cookie();
+  //     let res = await apiAuth.logout();
+  //     console.log("logout response", res);
+  //     dispatch({
+  //       type: "LOGOUT",
+  //     });
+
+  //     history.push("/login");
+  //   } catch (err) {
+  //     console.log("Error fetching users:", err.response.data);
+  //     // history.push("/login");
+  //     if (err.response && err.response.status >= 400)
+  //       toast.error(err.response.data);
+  //   }
+  // };
