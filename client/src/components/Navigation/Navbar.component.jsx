@@ -29,6 +29,9 @@ const Navbar = () => {
           <Link className="nav-link m-2" to="/dashboard/buyer">
             Dashboard
           </Link>
+          <Link className="nav-link" to="/stripe/callback">
+            StripeCallback
+          </Link>
 
           <Button
             className="nav-link m-2"
@@ -53,6 +56,9 @@ const Navbar = () => {
           </Link>
           <Link className="nav-link" to="/register">
             Register
+          </Link>
+          <Link className="nav-link" to="/stripe/callback">
+            StripeCallback
           </Link>
         </>
       )}

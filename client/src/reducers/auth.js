@@ -5,10 +5,12 @@ let initialUserState = { loggedIn: false, user: null, products: [{}] }
 export const authReducer = (state = initialUserState, action) => {
   switch (action.type) {
     case "LOGGED_IN_USER":
+      console.log('action.payload', action.payload)
       return {
-        ...state,
+        user: {...state.user, ...action.payload.user },
         loggedIn: true,
-        ...action.payload
+        stripe: { ...state.stripe, ...action.payload.stripe },
+        balance: {...state.balance, ...action.payload.balance }
       }
     // action.payload //return { ...state, ...action.payload };
     case 'LOGOUT':

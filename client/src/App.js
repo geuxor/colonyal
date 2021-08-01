@@ -14,6 +14,7 @@ import Admin from './components/Admin/Admin.component';
 import Register from './auth/Register';
 import DashboardBuyer from './components/Dashboard/DashboardBuyer.component';
 import DashboardSeller from './components/Dashboard/DashboardSeller.component';
+import StripeCallback from './components/Stripe/StripeCallback.component';
 // import { useStatus } from './auth/checkStatus'
 // import { useEffect } from 'react';
 
@@ -46,8 +47,9 @@ function App() {
           <PrivateRoute exact path="/admin" component={Admin} />
           <Route path="/logout" component={LogOut} />
           <Route exact path="/register" component={Register} />
-          <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
           <PrivateRoute exact path="/dashboard/buyer" component={DashboardBuyer} />
+          <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
+          <Route exact path="/stripe/callback" component={StripeCallback} />
           <Redirect from="/" to="/" exact />
         </Switch>
       </BrowserRouter>

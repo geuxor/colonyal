@@ -10,7 +10,7 @@ const { Ribbon } = Badge;
 
 const DashboardBanner = () => {
   const dispatch = useDispatch();
-  const store = useSelector((state) => (state));
+  const store = useSelector((state) => state);
   // const store = useSelector((state) => state);
   console.log("DashboardBanner store", store);
   // const { user } = state;
@@ -19,16 +19,16 @@ const DashboardBanner = () => {
 
   useEffect(() => {
     console.log("checking account balance for", store);
-    if (store.loggedIn & store.email !== '') {
+    if (store.loggedIn & (store.email !== "")) {
       async function stripeBalance() {
         let res = await apiStripe.getAccountBalance(store);
         console.log("fetching account balance", res.data);
         setBalance(res.data);
         console.log("*****", balance);
-        // dispatch({
-        //   type: "LOGGED_IN_USER",
-        //   payload: balance,
-        // });
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: { balance: {...balance } },
+        });
       }
       stripeBalance();
     }
@@ -57,21 +57,24 @@ const DashboardBanner = () => {
       <Card>
         <div className="d-flex">
           <Meta
-            avatar={<Avatar>{store.email[0]}</Avatar>}
-            title={`${store.user}'s Dashboard`}
-            description={`Joined ${moment(store.email.createdAt).fromNow()}`}
+            avatar={<Avatar>{store.user.email[0]}</Avatar>}
+            title={`${store.user.email}'s Dashboard`}
+            description={`Joined ${moment(
+              store.user.createdAt
+            ).fromNow()}`}
           />
         </div>
       </Card>
-      {store.email && store.user &&
-        store.user.stripe_seller &&
-        store.user.stripe_seller.charges_enabled && (
+      {store.user.email &&
+        store.stripe &&
+        store.stripe.stripe_seller &&
+        store.stripe.stripe_seller.charges_enabled && (
           <>
             <Ribbon text="Avaliable" color="grey">
               <Card className="bg-light pt-1">
-                {balance &&
-                  balance.pending &&
-                  balance.pending.map((bp, i) => (
+                {store.stripe.balance &&
+                  store.stripe.balance.pending &&
+                  store.stripe.balance.pending.map((bp, i) => (
                     <span key={i} className="lead">
                       {apiStripe.currencyFormatter(bp)}
                     </span>

@@ -36,10 +36,11 @@ const getUsers = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
   logme()
-  console.log('userProfile');
+  console.log('getuserProfile');
   try {
     const user = req.user
-    res.status(200).send(user);
+    const {email, firstname, lastname, createdAt} = user
+    res.status(200).send({ email, firstname, lastname, createdAt });
   } catch {
     res.status(404).send({ error, message: '🐛 User not found' });
   }

@@ -28,7 +28,7 @@ const Login = ({ history }) => {
           // save log in state to redux
           dispatch({
             type: "LOGGED_IN_USER",
-            payload: { email: res.data}
+            payload: { user: {email: res.data}}
           });
           history.push("/admin");
         } else {

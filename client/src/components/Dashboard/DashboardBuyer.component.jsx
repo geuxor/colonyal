@@ -9,11 +9,11 @@ const DashboardBuyer = () => {
         <DashboardBanner />
       </div>
 
-      <div className="container-fluid pb-4">
+      <div className="container-fluid p-1">
         <DashboardNav />
       </div>
 
-      <div className="container-fluid">
+      <div className="container-fluid p-3">
         <p>Show all orders and a button to browse products</p>
         <div className="container-fluid">
           <div className="row">

@@ -10,9 +10,13 @@ const options = {
   // xsrfHeaderName: 'X-XSRF-TOKEN',
 };
 
+apiStripe.stripeCheckAccount = async (user) => {
+  return await axios.post(`${process.env.REACT_APP_API}/stripe/account-status`, user, options)
+}
+
 //do we need async await here?
 apiStripe.stripeConnectAccount = async (user) => {
-  return await axios.post(`${process.env.REACT_APP_API}/stripe/connect-account`, user)
+  return await axios.post(`${process.env.REACT_APP_API}/stripe/connect-account`, user, options)
 }
 
 //func => axios.post does a return - but if no {} no return
