@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const authMiddleware = require('./middlewares/auth.mw');
+const statusMiddleware = require('./middlewares/status.mw');
 const productCreatedby = require('./middlewares/products.mw');
 console.log('routes:                       💫 importing routes');
 //auth routes
 const userController = require('./controllers/user.controller')
 router.post('/register', userController.addUser);
 router.post('/login', userController.loginUser);
+router.post('/status', statusMiddleware);
 // router.get('/status', authMiddleware, userController.getStatus);
 router.get('/users', authMiddleware, userController.getUsers);
 router.get('/logout', userController.logoutUser);

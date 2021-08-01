@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const db = require('../models/index')
 const { validateNewUser, validateOldUser } = require('../utils/validate.user')
 

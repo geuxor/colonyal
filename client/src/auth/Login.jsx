@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import apiService from "../ApiService/auth";
 import LoginForm from "../components/LoginForm.component";
 import { useDispatch } from "react-redux";
-// import auth from "../utils/auth"
-
 
 const Login = ({ history }) => {
   console.log("welcome to login");
@@ -70,7 +68,3 @@ const Login = ({ history }) => {
 };
 
 export default Login;
-
-// const initialState = auth.isAuthenticated();
-  // const [isAuthenticated, setIsAuthenticated] = useState(initialState);
-  

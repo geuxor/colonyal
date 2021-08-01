@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
 function Admin(props) {
+  console.log('this is admin');
   // const [users, setUsers] = useState({});
 
   // useEffect(() => {

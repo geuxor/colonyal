@@ -1,12 +1,12 @@
-import DashboardNav from "../Navigation/DashboardNav.component";
-import ConnectNav from "../Navigation/ConnectNav.component"
+import DashboardNav from "./DashboardNav.component"
+import DashboardBanner from "./DashboardBanner.component"
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const DashboardBuyer = () => {
   return (
     <>
       <div className="container-fluid bg-warning p-3">
-        <ConnectNav />
+        <DashboardBanner />
       </div>
 
       <div className="container-fluid pb-4">
@@ -21,7 +21,7 @@ const Dashboard = () => {
               <h2>My Orders</h2>
             </div>
             <div className="col-md-2">
-              <Link to="/" className="btn btn-primary">
+              <Link to="/buyer" className="btn btn-primary">
                 Browse Products
               </Link>
             </div>
@@ -32,4 +32,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardBuyer;

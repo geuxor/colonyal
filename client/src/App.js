@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/PrivateRoute.component";
-import apiService from "./ApiService/auth"
-// import auth from './utils/auth';
 import { useSelector } from 'react-redux';
-import { authReducer } from './reducers/auth'
-
+import LogOut from './auth/Logout'
+import './App.css';
+// import { useHistory } from "react-router-dom";
 // components
 import Navbar from './components/Navigation/Navbar.component'
 import Login from './auth/Login';
 import Admin from './components/Admin/Admin.component';
-import Logout from './auth/Logout';
 import Register from './auth/Register';
+import Dashboard from './components/Dashboard/Dashboard.component';
+import DashboardBuyer from './components/Dashboard/DashboardBuyer.component';
+import DashboardSeller from './components/Dashboard/DashboardSeller.component';
+import { useStatus } from './auth/checkStatus'
+// import { useEffect } from 'react';
 
 function App() {
   const user = useSelector((state) => state.user);
   console.log('user is', user);
+  
+  // const { checkUser } = checkStatus();
+  // useEffect(() => {
+  useStatus()
+  // }, []);
 
   return (
     <div className="App">
@@ -38,8 +45,10 @@ function App() {
         <Switch>
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/admin" component={Admin} />
-          <Route exact path="/logout" component={Logout} />
+          <Route path="/logout" component={LogOut} />
           <Route exact path="/register" component={Register} />
+          <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
+          <PrivateRoute exact path="/dashboard/buyer" component={DashboardBuyer} />
           <Redirect from="/" to="/" exact />
         </Switch>
       </BrowserRouter>
@@ -48,9 +57,9 @@ function App() {
 }
 
 export default App;
-{/* <Navbar isAuthenticated={isAuthenticated} /> */ }
-{/* <PrivateRoute exact path="/admin" component={Admin} /> */ }
-{/* <Route exact path="/admin" component={Admin} /> */}
+// {/* <Navbar isAuthenticated={isAuthenticated} /> */ }
+// {/* <PrivateRoute exact path="/admin" component={Admin} /> */ }
+// {/* <Route exact path="/admin" component={Admin} /> */}
 
   // const initialState = auth.isAuthenticated();
   // const [isAuthenticated, setIsAuthenticated] = useState({
@@ -80,3 +89,4 @@ export default App;
   // useEffect(() => {
   //   getStatus()
   // }, [])
+//{/* <Route exact path="/logout" component={Logout} /> */ }

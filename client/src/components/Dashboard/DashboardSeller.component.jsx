@@ -1,23 +1,25 @@
-import DashboardNav from "../Navigation/DashboardNav.component";
-import ConnectNav from "../../components/Navigation/ConnectNav.component";
 import { Link } from "react-router-dom";
 
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { ApiOutlined } from "@ant-design/icons";
-import { stripeConnectAccount } from "../../actions/stripe";
+import { stripeConnectAccount } from "../../ApiService/stripe";
 import { toast } from "react-toastify";
+import DashboardBanner from "./DashboardBanner.component";
+import DashboardNav from "./DashboardNav.component";
 
 const DashboardSeller = () => {
-  const { auth } = useSelector((state) => ({ ...state }));
+  // const user = useSelector((state) => ({ ...state }));
+  const store = useSelector((state) => state);
+  console.log('store.....', store);
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     setLoading(true);
     try {
       // get stripe onboarding link
-      let res = await stripeConnectAccount(auth.token);
-      //why is res undefined? 
+      let res = await stripeConnectAccount(store.user);
+      //why is res undefined?
       console.log(res.data);
       window.location.href = res.data;
     } catch (err) {
@@ -57,7 +59,7 @@ const DashboardSeller = () => {
             <ApiOutlined className="h1" />
             <h4>Setup Payouts to create new Products</h4>
             <p className="lead">
-              <b>Colonia.dk</b> partners with Stripe to transfer your earnings
+              <b>Colonyal</b> partners with Stripe to transfer your earnings
               to your bank account You'll be redirected to Stripe's official
               platform to complete the process.
               <br />
@@ -95,21 +97,18 @@ const DashboardSeller = () => {
   return (
     <>
       <div className="container-fluid bg-secondary p-5">
-        <ConnectNav />
+        <DashboardBanner />
       </div>
 
       <div className="container-fluid p-4">
         <DashboardNav />
       </div>
 
-      {auth &&
-      auth.user &&
-      auth.user.stripe_seller &&
-      auth.user.stripe_seller.charges_enabled
+      {store.user &&
+      store.user.stripe_seller &&
+      store.user.stripe_seller.charges_enabled
         ? connected()
         : notConnected()}
-
-      {/* <pre>{JSON.stringify(auth, null, 4)}</pre> */}
     </>
   );
 };

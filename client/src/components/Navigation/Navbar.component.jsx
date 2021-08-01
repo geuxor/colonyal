@@ -1,21 +1,15 @@
-import apiService from "../../ApiService/auth"
+import { useSelector } from "react-redux";
 import React from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { Logout } from "../../auth/Logout"
+import { Link, NavLink } from "react-router-dom";
+import { Button } from "reactstrap";
+import { useLogOut } from "../../auth/Logout";
+
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   console.log("Navbar: user is", user);
-
-  // const Navbar = ({ isAuthenticated }) => {
-  // console.log("isAuthenticated", isAuthenticated);
-  // const initialState = auth.isAuthenticated();
-  // const [isAuthenticated, setIsAuthenticated] = useState(true);
-  // isAuthenticated=true
-
-  // console.log(JSON.stringify(auth));
-
+  const { logoutUser } = useLogOut();
+    //  const dispatch = useDispatch();
+ 
   return (
     <div className="nav bg-light d-flex justify-content-center">
       <Link className="nav-link" to="/">
@@ -32,12 +26,22 @@ const Navbar = () => {
           <Link className="nav-link p-2" to="/admin">
             Admin
           </Link>
-          <Link className="nav-link m-2" to="/dashboard">
+          <Link className="nav-link m-2" to="/dashboard/buyer">
             Dashboard
           </Link>
-          <Link className="nav-link m-2" to="/logout">
+
+          <Button
+            className="nav-link m-2"
+            component={NavLink}
+            color="white"
+            to="/logout"
+            // here now you can safely logout user since no hooks are being called
+            onClick={function () {
+              logoutUser();
+            }}
+          >
             Logout
-          </Link>
+          </Button>
         </>
       ) : (
         <>
@@ -58,12 +62,33 @@ const Navbar = () => {
 
 export default Navbar;
 
-// Logout {//JSON.stringify(auth.user.username)}
-// {isAuthenticated ? (
-//         ) : (
-// )}
-
 // <Link to="/logout">Logout</Link>;
-          // <button onClick={Logout} className="nav-link">
-          //   Logout
-          // </button>;
+// <button onClick={Logout} className="nav-link">
+//   Logout
+// </button>;
+
+  //Logout Function
+  // const logout = useLogout();
+  // const history = useHistory();
+  // const dispatch = useDispatch();
+
+  // const Logout = async () => {
+  //   console.log("LOGOUT");
+
+  //   try {
+  //     console.log("logged out?-----------------");
+  //     delete_cookie();
+  //     let res = await apiService.logout();
+  //     console.log("logout response", res);
+  //     dispatch({
+  //       type: "LOGOUT",
+  //     });
+
+  //     history.push("/login");
+  //   } catch (err) {
+  //     console.log("Error fetching users:", err.response.data);
+  //     // history.push("/login");
+  //     if (err.response && err.response.status >= 400)
+  //       toast.error(err.response.data);
+  //   }
+  // };
