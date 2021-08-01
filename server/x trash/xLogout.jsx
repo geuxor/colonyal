@@ -1,7 +1,7 @@
 // import { get_cookie, delete_cookie } from "./client/src/utils/cookieHandler";
 // import { useDispatch } from "react-redux";
 // import { useHistory } from "react-router-dom";
-// import apiService from "./client/src/ApiService/auth";
+// import apiAuth from "./client/src/ApiService/auth";
 // import { toast } from "react-toastify";
 // import { useEffect } from "react";
 
@@ -16,7 +16,7 @@
 //       try {
 //         console.log("logged out?-----------------");
 //         delete_cookie(get_cookie());
-//         let res = await apiService.logout();
+//         let res = await apiAuth.logout();
 //         console.log("logout response", res);
 //         dispatch({
 //           type: "LOGOUT",

@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import RegisterForm from "../components/RegisterForm.component";
 import { toast } from "react-toastify";
-import apiService from "../ApiService/auth"
+import apiAuth from "../ApiService/auth";
 
 // function App() {
 //   const notify = () => toast("Wow so easy!");
@@ -26,7 +26,7 @@ function Register({ history }) {
     // console.table({ username, email, password })
     // if (!username || !email || !password) return console.log('error')
     try {
-      const res = await apiService.registerUser({
+      const res = await apiAuth.registerUser({
         firstname,
         lastname,
         email,

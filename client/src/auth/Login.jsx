@@ -1,7 +1,7 @@
 import { get_cookie } from '../utils/cookieHandler'
 import { useState } from "react";
 import { toast } from "react-toastify";
-import apiService from "../ApiService/auth";
+import apiAuth from "../ApiService/auth";
 import LoginForm from "../components/LoginForm.component";
 import { useDispatch } from "react-redux";
 
@@ -16,7 +16,7 @@ const Login = ({ history }) => {
     console.log("SEND LOGIN DATA", { email, password });
     const user = { email, password };
     try {
-      let res = await apiService.loginUser(user);
+      let res = await apiAuth.loginUser(user);
       console.log("login response", res);
       if (res.data && res.data === email) {
         console.log("LOGGIN SUCCESSFULL ===> ");
@@ -28,7 +28,7 @@ const Login = ({ history }) => {
           // save log in state to redux
           dispatch({
             type: "LOGGED_IN_USER",
-            payload: res.data,
+            payload: { email: res.data}
           });
           history.push("/admin");
         } else {

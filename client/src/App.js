@@ -12,10 +12,9 @@ import Navbar from './components/Navigation/Navbar.component'
 import Login from './auth/Login';
 import Admin from './components/Admin/Admin.component';
 import Register from './auth/Register';
-import Dashboard from './components/Dashboard/Dashboard.component';
 import DashboardBuyer from './components/Dashboard/DashboardBuyer.component';
 import DashboardSeller from './components/Dashboard/DashboardSeller.component';
-import { useStatus } from './auth/checkStatus'
+// import { useStatus } from './auth/checkStatus'
 // import { useEffect } from 'react';
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
   
   // const { checkUser } = checkStatus();
   // useEffect(() => {
-  useStatus()
+  // useStatus()
   // }, []);
 
   return (
@@ -72,7 +71,7 @@ export default App;
   //   console.log('getting status');
 
   //   try {
-  //     let res = await apiService.loginUser(user);
+  //     let res = await apiAuth.loginUser(user);
   //     console.log("login response", res);
   //     // if (res.data && res.data === email) {
   //     //   console.log("LOGGIN SUCCESSFULL ===> ");

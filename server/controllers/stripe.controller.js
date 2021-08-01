@@ -238,6 +238,7 @@ const getAccountStatus = async (req, res) => {
 const getAccountBalance = async (req, res) => {
   const user = req.user
   // const user = await userModel.findById(req.user._id)
+  console.log('stripe-controller: fetching stripe account balance', user)
   if (!user) return null;
   try {
     const balance = await stripe.balance.retrieve({

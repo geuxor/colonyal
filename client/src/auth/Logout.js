@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import apiService from "../ApiService/auth"
+import apiAuth from "../ApiService/auth"
 import { delete_cookie } from "../utils/cookieHandler";
 import { toast } from "react-toastify";
 import { useEffect } from 'react';
@@ -17,7 +17,7 @@ export const useLogOut = () => {
         type: "LOGOUT",
       });
       toast.info('You are now Logged out...');
-      let res = await apiService.logout();
+      let res = await apiAuth.logout();
       console.log("logout response", res);
       history.push("/login");
     } catch (err) {

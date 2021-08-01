@@ -5,8 +5,8 @@ import { Button } from "reactstrap";
 import { useLogOut } from "../../auth/Logout";
 
 const Navbar = () => {
-  const user = useSelector((state) => state.user);
-  console.log("Navbar: user is", user);
+  const loggedIn = useSelector((state) => state.loggedIn);
+  console.log("Navbar: user is", loggedIn);
   const { logoutUser } = useLogOut();
     //  const dispatch = useDispatch();
  
@@ -15,7 +15,7 @@ const Navbar = () => {
       <Link className="nav-link" to="/">
         Home
       </Link>
-      {user ? (
+      {loggedIn ? (
         <>
           <Link className="nav-link p-2" to="/stripe/callback">
             stripeCallback
@@ -78,7 +78,7 @@ export default Navbar;
   //   try {
   //     console.log("logged out?-----------------");
   //     delete_cookie();
-  //     let res = await apiService.logout();
+  //     let res = await apiAuth.logout();
   //     console.log("logout response", res);
   //     dispatch({
   //       type: "LOGOUT",

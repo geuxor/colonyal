@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { ApiOutlined } from "@ant-design/icons";
-import { stripeConnectAccount } from "../../ApiService/stripe";
+import apiStripe from "../../ApiService/stripe";
 import { toast } from "react-toastify";
 import DashboardBanner from "./DashboardBanner.component";
 import DashboardNav from "./DashboardNav.component";
@@ -18,7 +18,7 @@ const DashboardSeller = () => {
     setLoading(true);
     try {
       // get stripe onboarding link
-      let res = await stripeConnectAccount(store.user);
+      let res = await apiStripe.stripeConnectAccount(store.user);
       //why is res undefined?
       console.log(res.data);
       window.location.href = res.data;

@@ -1,5 +1,3 @@
-import apiService from '../ApiService/auth';
-import axios from 'axios'
 export function get_cookie() {
   // console.log("document.cookie=>", document.cookie);
   return document.cookie.split(';').some(c => {
@@ -18,7 +16,7 @@ export function check_cookie() {
     return c.trim().startsWith(process.env.REACT_APP_KUK + '=')
   })
 
-  // const res = await apiService.loginUser(sid)
+  // const res = await apiAuth.loginUser(sid)
   // console.log('res', res)
   return sid
 
