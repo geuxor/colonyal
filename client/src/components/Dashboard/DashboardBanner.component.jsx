@@ -9,30 +9,29 @@ const { Meta } = Card;
 const { Ribbon } = Badge;
 
 const DashboardBanner = () => {
-  const dispatch = useDispatch();
   const store = useSelector((state) => state);
   // const store = useSelector((state) => state);
   console.log("DashboardBanner store", store);
   // const { user } = state;
   const [, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
-
-  useEffect(() => {
+  const dispatch = useDispatch();
+  
+  // useEffect(() => {
+    const stripeBalance = async () => {
     console.log("checking account balance for", store);
     if (store.loggedIn & (store.email !== "")) {
-      async function stripeBalance() {
-        let res = await apiStripe.getAccountBalance(store);
-        console.log("fetching account balance", res.data);
-        setBalance(res.data);
-        console.log("*****", balance);
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: { balance: {...balance } },
-        });
-      }
-      stripeBalance();
+      let res = await apiStripe.getAccountBalance(store);
+      console.log("fetching account balance", res.data);
+      setBalance(res.data);
+      console.log("*****", balance);
+      dispatch({
+        type: "LOGGED_IN_USER",
+        payload: { balance: { ...balance } },
+      });
     }
-  }, []);
+  };
+  // }, []);
 
   const handlePayoutSettings = async () => {
     setLoading(true);
@@ -54,39 +53,48 @@ const DashboardBanner = () => {
 
   return (
     <div>
-      <Card>
+      <Card className="p-0">
         <div className="d-flex">
           <Meta
-            avatar={<Avatar>{store.user.firstname[0]}</Avatar>}
+            avatar={<Avatar>{store.user.email[0]}</Avatar>}
             title={`${store.user.firstname}'s Dashboard`}
-            description={`Joined ${moment(
-              store.user.createdAt
-            ).fromNow()}`}
+            description={`Joined ${moment(store.user.createdAt).fromNow()}`}
           />
         </div>
       </Card>
-      {store.user.email &&
-        store.stripe &&
-        store.stripe.charges_enabled && (
-          <>
-            <Ribbon text="Avaliable" color="grey">
-              <Card className="bg-light pt-1">
-                {store.balance &&
-                  store.balance.pending &&
-                  store.balance.pending.map((bp, i) => (
-                    <span key={i} className="lead">
-                      {apiStripe.currencyFormatter(bp)}
-                    </span>
-                  ))}
-              </Card>
-            </Ribbon>
-            <Ribbon text="Payouts" color="silver">
-              <Card onClick={handlePayoutSettings} className="bg-light pointer">
-                <SettingOutlined className="h5 pt-2" />
-              </Card>
-            </Ribbon>
-          </>
-        )}
+      {store.user.email && store.stripe && store.stripe.charges_enabled && (
+        <>
+          <Ribbon text="Avaliable" color="grey">
+            <Card className="bg-light p-0">
+              {store.balance &&
+                store.balance.pending &&
+                store.balance.pending.map((bp, i) => (
+                  <span key={i} className="lead">
+                    {apiStripe.currencyFormatter(bp)}
+                  </span>
+                ))}
+            </Card>
+          </Ribbon>
+          <Ribbon text="Payouts" color="silver">
+            <Card className="bg-light pointer">
+              <div>
+                <SettingOutlined
+                  onClick={handlePayoutSettings}
+                  className="h5 pt-2"
+                />
+              </div>
+              <div>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => stripeBalance()}
+                >
+                  Update Balance
+                </button>
+              </div>
+            </Card>
+          </Ribbon>
+        </>
+      )}
     </div>
   );
 };
