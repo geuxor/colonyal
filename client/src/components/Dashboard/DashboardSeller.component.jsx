@@ -24,6 +24,7 @@ const DashboardSeller = () => {
     (async () => {
       try {
         console.log("checking stripe conx for", store.user);
+        //fetch account info from stripe - saving to db and get stripedata+balance from the database 
         let res = await apiStripe.stripeCheckAccount(store.user);
         console.log("res from stripconxacc", res);
         // let stripe = res.data
@@ -31,7 +32,7 @@ const DashboardSeller = () => {
           type: "LOGGED_IN_USER",
           payload: { stripe: { ...res.data } },
         });
-
+        
       } catch (err) {
         if (err.response.data && err.response.data.length < 100) {
           console.log("errData", err.response.data);

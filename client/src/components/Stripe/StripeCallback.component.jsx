@@ -6,11 +6,13 @@ import apiAuth from "../../ApiService/auth";
 import DesignSpin from "../Design/Spin.component";
 import { toast } from "react-toastify";
 import { get_cookie } from "../../utils/cookieHandler";
+import { useHistory } from "react-router-dom";
 
-const StripeCallback = ({ history }) => {
+const StripeCallback = () => {  //{ history }
   console.log("Stripe onboarding completed");
   const { auth } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     //if user is logged in run accountStatus
@@ -35,7 +37,7 @@ const StripeCallback = ({ history }) => {
               payload: { user: res.data },
             });
                   // window.location.href = res.data;
-        //     // history.push("/admin");
+            history.push("/dashboard/seller");
           } else {
             toast.error("Error getting profile in - Please relogin");
           }

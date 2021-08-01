@@ -227,11 +227,14 @@ const getAccountStatus = async (req, res) => {
 
     const updatedStripeData = await db.StripeData.update(stripeDBdata,
       {
-        where: { stripe_account_id: user.stripe_account_id }
+        where: { stripe_account_id: user.stripe_account_id },
+        returning: true,
+        plain: true
       })
-    console.log('updatedStripeData', updatedStripeData);
+    console.log('updatedStripeData', updatedStripeData[1].dataValues);
     //how to pass the obj to the client
-    res.status(200).send(stripeDBdata);
+    res.status(200).send(updatedStripeData[1])
+    // res.status(200).send(stripeDBdata);
     // res.send(Buffer.from(updatedStripeData))
   } catch (err) {
     console.log(err)
@@ -248,14 +251,33 @@ const getAccountBalance = async (req, res) => {
     const balance = await stripe.balance.retrieve({
       stripe_account: user.stripe_account_id, //stripeAccount
     });
+    console.log('balance is now::: ', balance.pending)
+    //how to define schema for array of objects???
+    const updatedStripeBalance = await db.StripeData.update(
+      {
+        balance_pending_amount: balance.pending[0].amount,
+        balance_pending_curr: balance.pending[0].currency
+      },
+      {
+        where: { stripe_account_id: user.stripe_account_id },
+        returning: true,
+        plain: true
+      })
     //   .then(({ pending }) => (
     // {
     //   pending: pending[0].amount,
     // }
 
-    console.log("BALANCE ===>", balance);
+    console.log("BALANCE ===>", updatedStripeBalance[1].dataValues);
     // res.send(balance)
-    res.json({ available: balance.available, pending: balance.pending });
+    res.json(updatedStripeBalance)
+    // res.json({ available: balance.available, pending: balance.pending });
+    // res.json(
+    //   {
+    //     balance_pending_amount: balance.pending[0].amount,
+    //     balance_pending_curr: balance.pending[0].currency
+    //   })
+    // res.status(200).send(balance)
   } catch (err) {
     console.log(err);
   }

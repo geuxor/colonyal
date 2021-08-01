@@ -49,15 +49,8 @@ apiStripe.currencyFormatter = (data) => {
 };
 
 // no {} and return used - and it works anyway
-apiStripe.payoutSetting = async (token) =>
+apiStripe.payoutSetting = async (user) =>
   await axios.post(
-    `${process.env.REACT_APP_API}/payout-setting`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+    `${process.env.REACT_APP_API}/stripe/payout-setting`, user, options);
 
 export default apiStripe

@@ -41,6 +41,12 @@ function StripeDataModel(seq, types) {
     default_currency: {
       type: types.STRING
     },
+    balance_pending_amount: {
+      type: types.INTEGER
+    },
+    balance_pending_curr: {
+      type: types.STRING
+    },
     fields_needed: {
       type: types.ARRAY(types.STRING)
     },
@@ -63,3 +69,21 @@ module.exports = StripeDataModel
 //     allowNull: false,
 //       unique: true,
 //     },
+
+// balance_pending: {
+//   type: types.STRING,
+//     get: function () {
+//       return JSON.parse(this.getDataValue('balance_pending'));
+//     },
+//   set: function (val) {
+//     return this.setDataValue('balance_pending', JSON.stringify(val));
+//   }
+// },
+
+
+
+
+        // object: 'balance',
+        // available: [{ amount: 0, currency: 'dkk', source_types: [Object] }],
+        // livemode: false,
+        // pending: [{ amount: 0, currency: 'dkk', source_types: [Object] }]
