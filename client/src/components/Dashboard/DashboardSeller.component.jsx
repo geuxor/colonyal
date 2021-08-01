@@ -137,9 +137,7 @@ const DashboardSeller = () => {
 
       <div className="container-fluid p-3">
         {store.stripe &&
-        store.stripe.charges_enabled &&
-        store.user.stripe_seller &&
-        store.user.stripe_seller.charges_enabled
+        store.stripe.charges_enabled
           ? connected()
           : notConnected()}
       </div>

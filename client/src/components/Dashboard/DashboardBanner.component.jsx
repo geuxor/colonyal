@@ -57,8 +57,8 @@ const DashboardBanner = () => {
       <Card>
         <div className="d-flex">
           <Meta
-            avatar={<Avatar>{store.user.email[0]}</Avatar>}
-            title={`${store.user.email}'s Dashboard`}
+            avatar={<Avatar>{store.user.firstname[0]}</Avatar>}
+            title={`${store.user.firstname}'s Dashboard`}
             description={`Joined ${moment(
               store.user.createdAt
             ).fromNow()}`}
@@ -67,14 +67,13 @@ const DashboardBanner = () => {
       </Card>
       {store.user.email &&
         store.stripe &&
-        store.stripe.stripe_seller &&
-        store.stripe.stripe_seller.charges_enabled && (
+        store.stripe.charges_enabled && (
           <>
             <Ribbon text="Avaliable" color="grey">
               <Card className="bg-light pt-1">
-                {store.stripe.balance &&
-                  store.stripe.balance.pending &&
-                  store.stripe.balance.pending.map((bp, i) => (
+                {store.balance &&
+                  store.balance.pending &&
+                  store.balance.pending.map((bp, i) => (
                     <span key={i} className="lead">
                       {apiStripe.currencyFormatter(bp)}
                     </span>
