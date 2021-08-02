@@ -43,6 +43,9 @@ function UserModel(seq, types) {
       type: types.STRING,
       unique: true
     },
+    product_id: {
+      type: types.ARRAY(types.INTEGER)
+    },
     // stripe_seller: {
     //   type: types.STRING
     // },
@@ -68,12 +71,13 @@ function UserModel(seq, types) {
   });
   return User
 }
+
 UserModel.associate = function (models) {
   User.hasOne(models.StripeData, {
     foreignKey: 'stripe_account_id'
   });
-  User.hasMany(models.Product, {
-    foreignKey: 'product_id'
+  User.hasMany(models.Products, {
+    foreignKey: 'user_id'
   });
 };
 

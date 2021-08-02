@@ -2,6 +2,7 @@ const router = require('express').Router();
 const authMiddleware = require('./middlewares/auth.mw');
 const statusMiddleware = require('./middlewares/status.mw');
 const productCreatedby = require('./middlewares/products.mw');
+
 console.log('routes:                       💫 importing routes');
 //auth routes
 const userController = require('./controllers/user.controller')
@@ -24,12 +25,15 @@ router.post('/stripe/test', authMiddleware, stripeController.testAccountBalance)
 //product routes
 
 const productController = require('./controllers/product.controller')
+router.post("/products/new", authMiddleware, productController.addProduct);
+router.post("/products/only", authMiddleware, productController.addOnlyProduct);
+
 // const productOwner = require('../middlewares/product.mw')
-const multer = require('multer');
-const upload = multer({ dest: '/tmp/' });
+// const multer = require('multer');
+// const upload = multer({ dest: '/tmp/' });
 
 // const formidable = require('express-formidable')
-router.post("/create-product", authMiddleware, upload.single('file'), productController.addProduct);
+// router.post("/create-product", authMiddleware, upload.single('file'), productController.addProduct);
 
 // req.files to be arrays of files
 // router.post("/create-product", authMiddleware, formidable({ uploadDir: process.env.UPLOAD_DIR, multiples: true }),

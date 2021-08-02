@@ -18,7 +18,8 @@ import Admin from './components/Admin/Admin.component';
 import DashboardBuyer from './components/Dashboard/DashboardBuyer.component';
 import DashboardSeller from './components/Dashboard/DashboardSeller.component';
 import StripeCallback from './components/Stripe/StripeCallback.component';
-
+import NewProduct from './Products/NewProduct.component'
+import Cloudinary from './components/Cloudinary'
 function App() {
   // const user = useSelector((state) => state.user);
   // const [{ user, isLoggedIn }, dispatch] = useStateValue();
@@ -77,10 +78,12 @@ function App() {
           pauseOnHover
         />
         <Switch>
+          <Route exact path="/cloudinary" component={Cloudinary} />
           <Route exact path="/login" component={Login} />
           <PrivateRoute exact path="/admin" component={Admin} />
           <Route path="/logout" component={LogOut} />
           <Route exact path="/register" component={Register} />
+          <PrivateRoute exact path="/products/new" component={NewProduct} />
           <PrivateRoute exact path="/dashboard/buyer" component={DashboardBuyer} />
           <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
           <Route exact path="/stripe/callback" component={StripeCallback} />
@@ -130,6 +133,7 @@ export default App;
 
 //separate useEffect to a new function
 // import { StatusCheck } from "./auth/StatusCheck"
+// import Cloudinary from './components/Cloudinary';
 // (async () => {
 //   try {
 //     const status = await StatusCheck()

@@ -5,18 +5,18 @@ function ProductModel(seq, types) {
   const Product = seq.define('Product', {
     title: {
       type: types.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     description: {
       type: types.STRING,
-      allowNull: false
+      // allowNull: false
     },
     location: {
       type: types.STRING,
     },
     price: {
       type: types.INTEGER,
-      allowNull: false
+      // allowNull: false
     },
     created_by: {
       type: types.STRING,
@@ -34,15 +34,19 @@ function ProductModel(seq, types) {
       type: types.INTEGER
     },
     timestamps: types.DATE
-  }, {
+  },
+   {
+    
   });
   return Product
 }
+
+//???
 ProductModel.associate = function (models) {
   Product.belongsTo(models.User);
-  Product.hasMany(models.Category, {
-    foreignKey: 'category_id'
-  });
+  // Product.hasMany(models.Categories, {
+  //   foreignKey: 'category_id'
+  // });
 };
 
 module.exports = ProductModel

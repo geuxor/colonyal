@@ -1,52 +1,78 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { createProduct } from "../../actions/products";
+import apiProduct from "../ApiService/products";
 import { useSelector } from "react-redux";
 import { ProductCreateForm } from "../Forms/NewProduct.Form";
 
+//cloudinary
+// import { Cloudinary } from "@cloudinary/base";
+import { AdvancedImage } from "@cloudinary/react";
+import { CloudinaryImage } from "@cloudinary/base/assets/CloudinaryImage";
+import URLConfig from "@cloudinary/base/config/URLConfig";
+import CloudConfig from "@cloudinary/base/config/CloudConfig";
+import { fill } from "@cloudinary/base/actions/resize";
+import { thumbnail } from "@cloudinary/base/actions/resize";
+import { focusOn } from "@cloudinary/base/qualifiers/gravity";
+import { face } from "@cloudinary/base/qualifiers/focusOn";
+import { byRadius } from "@cloudinary/base/actions/roundCorners";
+
 const NewProduct = () => {
-  const { auth } = useSelector((state) => ({ ...state }));
-  const { token } = auth;
+  const store = useSelector((state) => ({ ...state }));
 
   // state
   const [location, setLocation] = useState("Aarhus");
+  const [image, setImage] = useState("");
+  const [upload, setUpload] = useState("");
+  const [preview, setPreview] = useState(
+    "https://via.placeholder.com/100x100.png?text=PREVIEW"
+  );
   const [values, setValues] = useState({
     title: "new Product",
     description: "greates product ever",
-    image: "peak-3.jpg",
     price: "234",
     from: "2021-07-25T17:21:18.759+0000",
     to: "",
     quantity: 10,
   });
 
-  const [preview, setPreview] = useState(
-    "https://via.placeholder.com/100x100.png?text=PREVIEW"
-  );
   // destructuring variables from state
-  const { title, description, image, price, from, to, quantity } = values;
+  const { title, description, price, from, to, quantity } = values;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(values);
-    // console.log(location);
-
-    //access to formData by the browser
-    let productData = new FormData();
-    productData.append("title", title);
-    productData.append("description", description);
-    productData.append("location", location);
-    productData.append("price", price);
-    image && productData.append("image", image);
-    productData.append("from", from);
-    productData.append("to", to);
-    productData.append("quantity", quantity);
-
-    console.log([...productData]);
     try {
-      let res = await createProduct(token, productData);
-      console.log("PRODUCT CREATE RES", res);
-      toast("New product is posted");
+      //upload to cloudinary
+      console.log("values.image", image);
+      const uploadData = new FormData();
+      uploadData.append("file", image);
+      uploadData.append("upload_preset", "mzgc3fjp");
+      const res = await apiProduct.uploadImage(uploadData);
+      console.log(res.data.public_id);
+
+      //save to db
+      // const productData = new FormData();
+      // productData.append("title", title);
+      // productData.append("description", description);
+      // productData.append("price", price);
+      // // productData.append("location", location);
+      // image && productData.append("image", res.data.public_id);
+      // // productData.append("from", from);
+      // // productData.append("to", to);
+      // // productData.append("quantity", quantity);
+      // // productData.append("email", store.user.email);
+      const productData = {
+        title,
+        description,
+        price,
+        image: res.data.public_id,
+      };
+      console.log(productData);
+
+      let dbres = await apiProduct.createProduct(productData);
+      console.log("dbres", dbres.statusText);
+
+      toast.success(dbres.statusText);
+
       //clear the form
       setValues({
         title: "",
@@ -57,26 +83,42 @@ const NewProduct = () => {
         to: "",
         quantity: 0,
       });
-      setLocation(" ");
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
+      setUpload("");
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 2300);
     } catch (err) {
       console.log(err);
       toast.error(err.response.data);
     }
   };
 
-  const handleImageChange = (e) => {
-    console.log(e.target.files[0]);
-    setPreview(URL.createObjectURL(e.target.files[0]));
-    setValues({ ...values, image: e.target.files[0] });
+  const handleImageCloud = async (files) => {
+    console.log("myImage ------------", image, files);
+    setImage(files);
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "mzgc3fjp");
+    formData.append("cloud_name", "geuxor");
+    console.log(formData);
+    try {
+      let res = await apiProduct.uploadImage(formData);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleImageChange = (files) => {
+    console.log(files[0]);
+    setImage(files[0]);
+    setPreview(URL.createObjectURL(files[0]));
+    // setValues({ ...values, image: e.target.files[0] });
   };
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
 
   return (
     <>
@@ -95,10 +137,14 @@ const NewProduct = () => {
               handleSubmit={handleSubmit}
               location={location}
               setLocation={setLocation}
+              handleImageCloud={handleImageCloud}
             />
           </div>
           <div className="col-md-2">
+            <div></div>
+
             <img
+              style={{ width: 150 }}
               src={preview}
               alt="preview_image"
               className="img img-fluid m-2"

@@ -1,31 +1,46 @@
 const db = require('../models/index')
-const fs = require('fs')
 
-const addProduct = async (req, res) => {
-  // console.log("req.fields", req.fields);
-  console.log("req.files", req.files.image.name, req.files.image.path);
+const addOnlyProduct = async (req, res) => {
+  console.log("addProduct: ", req.body);
   try {
-    let fields = req.fields;
-    let imageFile = req.files.image;
-    // let newProduct = new db.ProductModel(fields);
-    console.log('-----------------------', newProduct);
-
-    // handle image
-    if (imageFile) {
-      console.log(JSON.stringify(imageFile))
-      // newProduct.image.data = fs.readFileSync(imageFile.path);
-      // newProduct.image.contentType = imageFile.type;
-    }
-    // const product = await db.ProductModel.create(newUser);
-    res.json('product');
-
+    const product = await db.Product.create(req.body);
+    res.status(201).json(product);
   } catch (err) {
     console.log("saving product err => ", err);
     res.status(400).json({
       err: err.message,
     });
-    // res.status(400).send("Error saving");
   }
 };
 
-module.exports = { addProduct }
+const addProduct = async (req, res) => {
+  const user = req.user
+  console.log("saveImage: ", req.body.title, "for", user.dataValues.email);
+
+  try {
+    // const dbuser = await db.User.findOne({ 
+    //   where: { id: user.id },
+    //   include: ['Product']
+    // });
+
+    const product = await db.Product.create(req.body);
+    //??? its replacing all other previous values
+    const updateUser = await db.User.update(
+      { product_id: db.Sequelize.fn('array_append', db.Sequelize.col('product_id'), product.id) },
+      //   product_id: [product.id],
+      {
+        where: { id: user.id },
+        plain: true,
+        // returning: true
+      })
+    console.log(updateUser, " updated with ", product.dataValues)
+    res.status(201).json(product);
+  } catch (err) {
+    console.log("saveImage err => ", err);
+    res.status(400).json({
+      err: err.message,
+    });
+  }
+};
+
+module.exports = { addProduct, addOnlyProduct }

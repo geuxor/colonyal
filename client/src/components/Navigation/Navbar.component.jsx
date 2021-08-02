@@ -29,8 +29,11 @@ const Navbar = () => {
           <Link className="nav-link m-2" to="/dashboard/buyer">
             Dashboard
           </Link>
-          <Link className="nav-link" to="/stripe/callback">
-            StripeCallback
+          <Link className="nav-link" to="/products/new">
+            Add Product
+          </Link>
+          <Link className="nav-link" to="/cloudinary">
+            Cloudinary
           </Link>
 
           <Button
