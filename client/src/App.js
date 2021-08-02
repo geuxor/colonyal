@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute.component";
 import { useSelector } from 'react-redux';
 import LogOut from './auth/Logout'
 import './App.css';
+// import { get_cookie } from "../../utils/cookieHandler";
 // import { useHistory } from "react-router-dom";
 // components
 import Navbar from './components/Navigation/Navbar.component'
@@ -17,6 +18,7 @@ import DashboardSeller from './components/Dashboard/DashboardSeller.component';
 import StripeCallback from './components/Stripe/StripeCallback.component';
 // import { useStatus } from './auth/checkStatus'
 // import { useEffect } from 'react';
+// import apiAuth from './ApiService/auth';
 
 function App() {
   const user = useSelector((state) => state.user);

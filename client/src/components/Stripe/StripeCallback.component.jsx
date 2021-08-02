@@ -30,7 +30,7 @@ const StripeCallback = () => {  //{ history }
         let res = await apiAuth.getProfile();
         console.log("profile response", res.data);
         if (res.data) {
-          console.log("LOGGED IN SUCCESSFULL ===> ");
+          console.log("Stripecall back LOGGED IN SUCCESSFULL ===> ");
          // save log in state to redux
             dispatch({
               type: "LOGGED_IN_USER",
