@@ -6,13 +6,13 @@ import apiStripe from "../../ApiService/stripe";
 import { toast } from "react-toastify";
 import DashboardBanner from "./DashboardBanner.component";
 import DashboardNav from "./DashboardNav.component";
+import DesignSpin from "../Design/Spin.component";
 
 const DashboardSeller = () => {
   const dispatch = useDispatch();
-  const store = useSelector((state) => (state));
-    // const store = useSelector((state) => state);
-    console.log("store.....", store);
-    const [loading, setLoading] = useState(false);
+
+  // const store = useSelector((state) => state);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     //if user is logged in run accountStatus
@@ -23,8 +23,9 @@ const DashboardSeller = () => {
 
     (async () => {
       try {
+        setLoading(true);
         console.log("checking stripe conx for", store.user);
-        //fetch account info from stripe - saving to db and get stripedata+balance from the database 
+        //fetch account info from stripe - saving to db and get stripedata+balance from the database
         let res = await apiStripe.stripeCheckAccount(store.user);
         console.log("res from stripconxacc", res);
         // let stripe = res.data
@@ -32,9 +33,9 @@ const DashboardSeller = () => {
           type: "LOGGED_IN_USER",
           payload: { stripe: { ...res.data } },
         });
-        
+        setLoading(false);
       } catch (err) {
-        if (err.response.data && err.response.data.length < 100) {
+        if (err.response && err.response.data.length < 100) {
           console.log("errData", err.response.data);
           toast.error(err.response.data);
         } else {
@@ -47,6 +48,9 @@ const DashboardSeller = () => {
       }
     })();
   }, []);
+
+  const store = useSelector((state) => state);
+  console.log("store.....", store);
 
   const handleClick = async () => {
     setLoading(true);
@@ -74,12 +78,12 @@ const DashboardSeller = () => {
 
   const connected = () => (
     <div className="row">
-      <div className="col-md-10">
-        <h2>My Products</h2>
+      <div className="col-md-10 p-2">
+        <b>You are ready to create Products and receive payment</b>
       </div>
       <div className="col-md-2">
         <Link to="/products/new" className="btn btn-primary">
-          + Add New
+          + Add New Product
         </Link>
       </div>
     </div>
@@ -137,10 +141,13 @@ const DashboardSeller = () => {
       </div>
 
       <div className="container-fluid p-3">
-        {store.stripe &&
-        store.stripe.charges_enabled
-          ? connected()
-          : notConnected()}
+        {loading ? (
+          <DesignSpin message={"just a few seconds to check your stripe account..."} />
+        ) : store.stripe && store.stripe.charges_enabled ? (
+          connected()
+        ) : (
+          notConnected()
+        )}
       </div>
     </>
   );

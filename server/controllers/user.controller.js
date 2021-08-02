@@ -77,20 +77,24 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email && !password) throw new Error('🐛 password or email is empty')
-    const user = await db.User.findOne({ where: { email: email } });
+    const user = await db.User.findOne({ 
+      where: { email: email },
+      returning: true,
+      plain: true,
+    });
     // console.log(user.toJSON());
     
     if (!user) {
-      console.log(user, 'not found in DB!!!');
+      console.log(user.dataValues, 'not found in DB!!!');
       res.status(403).send('🐛 User not Found!');
     }
-    console.log('email found in DB!!!') //user.toJSON().email,
+    console.log(user.dataValues, 'email found in DB!!!') //user.toJSON().email, //[1].dataValues
     // bcrypt.compare
     const validatedPass = await validateOldUser(user, email, password)
     if (!validatedPass) throw new Error('🐛 password is incorrect');
     req.session.uid = user.id;
     console.log('loginUser: validated ok!!', user.email);
-    res.status(200).send(user.email);
+    res.status(200).send({ email: user.email, firstname: user.firstname, lastname: user.lastname, createdAt: user.createdAt});
   } catch (error) {
     console.log(error);
     res

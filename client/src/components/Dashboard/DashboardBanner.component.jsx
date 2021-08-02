@@ -11,20 +11,23 @@ const { Ribbon } = Badge;
 const DashboardBanner = () => {
   const store = useSelector((state) => state);
   const [, setLoading] = useState(false);
-  const [balance, setBalance] = useState({});
+  const [, setBalance] = useState({});
   const dispatch = useDispatch();
   
     const handleStripeBalance = async () => {
     console.log("checking account balance for", store);
     if (store.loggedIn & (store.email !== "")) {
       let res = await apiStripe.getAccountBalance(store);
-      console.log("*****fetching account balance", res.data);
+      console.log("*****fetching account balance", res); //updatedStripeBalance
       dispatch({
         type: "LOGGED_IN_USER",
         // payload: { balance: { ...res.data } },
-        payload: { stripe: { ...res.data }}
+        payload: { stripe: { ...res.data } },
       });
-      setBalance({balance_pending_amount: res.data.balance_pending_amount, balance_pending_curr: res.data.balance_pending_curr});
+      setBalance({
+        balance_pending_amount: res.data.balance_pending_amount,
+        balance_pending_curr: res.data.balance_pending_curr,
+      });
       console.log("*****", {
         balance_pending_amount: res.data.balance_pending_amount,
         balance_pending_curr: res.data.balance_pending_curr,
@@ -68,7 +71,17 @@ const DashboardBanner = () => {
         <>
           <Ribbon text="Avaliable" color="grey">
             <Card className="bg-light p-0">
-              {apiStripe.currencyFormatter({amount: store.stripe.balance_pending_amount , currency: store.stripe.balance_pending_curr})}
+              {store.stripe.balance_pending_curr && store.stripe
+                .balance_pending_amount !== null ? (
+                <>
+                  {apiStripe.currencyFormatter({
+                    amount: store.stripe.balance_pending_amount,
+                    currency: store.stripe.balance_pending_curr,
+                  })}
+                </>
+              ) : (
+                "unavailable"
+              )}
             </Card>
           </Ribbon>
           <Ribbon text="Payouts" color="silver">

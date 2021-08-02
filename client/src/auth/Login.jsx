@@ -18,7 +18,7 @@ const Login = ({ history }) => {
     try {
       let res = await apiAuth.loginUser(user);
       console.log("login response", res);
-      if (res.data && res.data === email) {
+      if (res.data && res.data.email === email) {
         console.log("LOGGIN SUCCESSFULL ===> ");
         console.log(res.data);
         //cookie read
@@ -28,9 +28,9 @@ const Login = ({ history }) => {
           // save log in state to redux
           dispatch({
             type: "LOGGED_IN_USER",
-            payload: { user: {email: res.data}}
+            payload: { user: {...res.data}}
           });
-          history.push("/admin");
+          history.push("/dashboard/buyer");
         } else {
           toast.error('Error logging in');
         }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import apiStripe from "../../ApiService/stripe";
+import { useDispatch } from "react-redux";
+// import apiStripe from "../../ApiService/stripe";
 import apiAuth from "../../ApiService/auth";
 // import { updateUserInLocalStorage } from "../../actions/auth";
 import DesignSpin from "../Design/Spin.component";
@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 
 const StripeCallback = () => {  //{ history }
   console.log("Stripe onboarding completed");
-  const { auth } = useSelector((state) => ({ ...state }));
+  // const store = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -50,27 +50,27 @@ const StripeCallback = () => {  //{ history }
     })();
   }, []);
 
-  const accountStatus = async () => {
-    try {
-      //call stripe.js and then backend
-      const res = await apiStripe.getAccountStatus(auth.token);
-      console.log("USER ACCOUNT STATUS ON STRIPE CALLBACK", res);
+  // const accountStatus = async () => {
+  //   try {
+  //     //call stripe.js and then backend
+  //     const res = await apiStripe.getAccountStatus(auth.token);
+  //     console.log("USER ACCOUNT STATUS ON STRIPE CALLBACK", res);
 
-      // after response update user in local storage / clear it before testing
-      // updateUserInLocalStorage(res.data, () => {
-      //this call back executes thanks to using next() in action/auth/updateUserInLocalStorage
-      // update user in redux (make sure you clear localstorage before testing this)
-      dispatch({
-        type: "LOGGED_IN_USER",
-        payload: res.data,
-      });
-      // redirect user to dashboard - not using Link!
-      window.location.href = "/dashboard/seller";
-      // });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     // after response update user in local storage / clear it before testing
+  //     // updateUserInLocalStorage(res.data, () => {
+  //     //this call back executes thanks to using next() in action/auth/updateUserInLocalStorage
+  //     // update user in redux (make sure you clear localstorage before testing this)
+  //     dispatch({
+  //       type: "LOGGED_IN_USER",
+  //       payload: res.data,
+  //     });
+  //     // redirect user to dashboard - not using Link!
+  //     window.location.href = "/dashboard/seller";
+  //     // });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return <DesignSpin message={"Checking if Stripe is ready..."} />;
 };

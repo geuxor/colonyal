@@ -270,7 +270,7 @@ const getAccountBalance = async (req, res) => {
 
     console.log("BALANCE ===>", updatedStripeBalance[1].dataValues);
     // res.send(balance)
-    res.json(updatedStripeBalance)
+    res.json(updatedStripeBalance[1])
     // res.json({ available: balance.available, pending: balance.pending });
     // res.json(
     //   {
