@@ -50,6 +50,16 @@ function StripeDataModel(seq, types) {
     fields_needed: {
       type: types.ARRAY(types.STRING)
     },
+    balance_pending: {
+      type: types.STRING,
+      get: function () {
+        return JSON.parse(this.getDataValue('balance_pending'));
+      },
+      set: function (val) {
+        console.log(val)
+        return this.setDataValue('balance_pending', JSON.stringify(val));
+      }
+    },
     timestamps: types.DATE
   }, {
   });

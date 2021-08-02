@@ -303,4 +303,31 @@ const getPayoutSetting = async (req, res) => {
   }
 };
 
-module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, getPayoutSetting }
+
+const testAccountBalance = async (req, res) => {
+  const user = req.user
+  // const user = await userModel.findById(req.user._id)
+
+  try {
+    //how to define schema for array of objects???
+    console.log('updatedStripeBalance');
+    const updatedStripeBalance = await db.StripeData.update(
+      {
+        balance_pending: [{ amount: 0, currency: 'dkk', source_types: 1 }, { amount: 10, currency: 'usd', source_types: 1 }]
+      },
+
+      {
+        where: { stripe_account_id: user.stripe_account_id },
+        plain: true
+      })
+
+
+
+    res.status(200).send(updatedStripeBalance)
+  } catch (err) {
+    console.log('***********', err);
+    res.status(500).send(err)
+  }
+}
+
+module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, getPayoutSetting, testAccountBalance }

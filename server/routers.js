@@ -19,6 +19,7 @@ router.post('/stripe/connect-account', authMiddleware, stripeController.createCo
 router.post("/stripe/account-status", authMiddleware, stripeController.getAccountStatus);
 router.post("/stripe/account-balance", authMiddleware, stripeController.getAccountBalance);
 router.post("/stripe/payout-setting", authMiddleware, stripeController.getPayoutSetting);
+router.post('/stripe/test', authMiddleware, stripeController.testAccountBalance)
 
 //product routes
 
