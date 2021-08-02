@@ -201,7 +201,7 @@ const getAccountStatus = async (req, res) => {
     const account = await updateDelayDaysAPI(user.stripe_account_id);
     // console.log("USER ACCOUNT UPDATED with 7 days payout >>>>>>>>>>>>>>>>>>>>>>", updatedAccount);
     // const account = await stripe.accounts.retrieve(user.stripe_account_id);
-    console.log("USER ACCOUNT Updated and RETRIEVED >>>>>>>>>>>>>>>>>>>>>>", account);
+    console.log("getAccountStatus: USER ACCOUNT Updated and RETRIEVED >>>>>>>>>>>>>>>>>>>>>>", account);
     // update delay days
     // const userUpdateResult = await db.User.update(
     //   { stripe_account_id: stripeAccount.id },
@@ -220,8 +220,6 @@ const getAccountStatus = async (req, res) => {
       capabilities_card_payments: account.capabilities.card_payments,
       capabilities_platform_payments: account.capabilities.platform_payments,
       fields_needed: account.verification.fields_needed,
-      payout_schedule: account.payout_schedule.delay_days,
-      fields_needed: account.verification.fields_needed
     }
     console.log('--------', stripeDBdata)
 
@@ -303,27 +301,21 @@ const getPayoutSetting = async (req, res) => {
   }
 };
 
-
 const testAccountBalance = async (req, res) => {
   const user = req.user
   // const user = await userModel.findById(req.user._id)
-
-  try {
+try {
     //how to define schema for array of objects???
     console.log('updatedStripeBalance');
-    const updatedStripeBalance = await db.StripeData.update(
+    const updated = await db.StripeData.update(
       {
         balance_pending: [{ amount: 0, currency: 'dkk', source_types: 1 }, { amount: 10, currency: 'usd', source_types: 1 }]
       },
-
       {
         where: { stripe_account_id: user.stripe_account_id },
         plain: true
       })
-
-
-
-    res.status(200).send(updatedStripeBalance)
+    res.status(200).send(updated)
   } catch (err) {
     console.log('***********', err);
     res.status(500).send(err)
