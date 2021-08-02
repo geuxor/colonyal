@@ -47,6 +47,7 @@ const DashboardSeller = () => {
         setLoading(false);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const store = useSelector((state) => state);

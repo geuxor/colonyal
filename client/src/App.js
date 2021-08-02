@@ -1,36 +1,70 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useEffect, useState } from 'react';
+import { useHistory, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import PrivateRoute from "./components/PrivateRoute.component";
-import { useSelector } from 'react-redux';
-import LogOut from './auth/Logout'
+import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer, toast } from "react-toastify";
+//hanlders
+import { get_cookie } from "./utils/cookieHandler";
+//css
 import './App.css';
-// import { get_cookie } from "../../utils/cookieHandler";
-// import { useHistory } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 // components
-import Navbar from './components/Navigation/Navbar.component'
 import Login from './auth/Login';
-import Admin from './components/Admin/Admin.component';
+import LogOut from './auth/Logout'
 import Register from './auth/Register';
+import apiAuth from './ApiService/auth';
+import Navbar from './components/Navigation/Navbar.component'
+import Admin from './components/Admin/Admin.component';
 import DashboardBuyer from './components/Dashboard/DashboardBuyer.component';
 import DashboardSeller from './components/Dashboard/DashboardSeller.component';
 import StripeCallback from './components/Stripe/StripeCallback.component';
-// import { useStatus } from './auth/checkStatus'
-// import { useEffect } from 'react';
-// import apiAuth from './ApiService/auth';
 
 function App() {
-  const user = useSelector((state) => state.user);
-  console.log('user is', user);
-  
-  // const { checkUser } = checkStatus();
-  // useEffect(() => {
-  // useStatus()
-  // }, []);
+  // const user = useSelector((state) => state.user);
+  // const [{ user, isLoggedIn }, dispatch] = useStateValue();
+  // console.log('user is', user);
+  const [isLoading, setIsLoading] = useState(true)
+  const dispatch = useDispatch();
+  // const history = useHistory();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const sid = get_cookie();
+        console.log("App: cookie:", sid);
+        if (sid) {
+          let res = await apiAuth.getProfile();
+          console.log("App: profile response:", res.data);
+          if (res.data) {
+            console.log("App: reLoggedIn SUCCESSFULL ===> ");
+            // save log in state to redux
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: { user: res.data },
+            });
+          } else {
+            console.log('App: err relogging - redirect to login')
+            toast.error("App: Error reLogging you in - Please relogin");
+          }
+          setIsLoading(false)
+        } else {
+          // history.push("/login");
+          setIsLoading(false)
+        }
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false)
+        if (err.response && err.response.status >= 400)
+          toast.error(err.response.data);
+      }
+    })();
+    //???
+    
+  }, [dispatch]);
 
   return (
     <div className="App">
+    {!isLoading ? (
       <BrowserRouter>
         <Navbar />
         <ToastContainer
@@ -55,6 +89,7 @@ function App() {
           <Redirect from="/" to="/" exact />
         </Switch>
       </BrowserRouter>
+      ) : (<p>im loading...</p>)}
     </div>
   );
 }

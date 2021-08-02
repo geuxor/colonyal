@@ -6,7 +6,7 @@ import { useLogOut } from "../../auth/Logout";
 
 const Navbar = () => {
   const loggedIn = useSelector((state) => state.loggedIn);
-  console.log("Navbar: user is", loggedIn);
+  console.log("Navbar: user is loggedin:", loggedIn);
   const { logoutUser } = useLogOut();
     //  const dispatch = useDispatch();
  
