@@ -27,20 +27,21 @@ const StripeCallback = () => {  //{ history }
         const sid = get_cookie();
         console.log("read the cookie:", sid);
         if (sid) {
-          let res = await apiAuth.getProfile();
-          console.log("profile response", res.data);
-          if (res.data) {
-            console.log("Stripecall back LOGGED IN SUCCESSFULL ===> ");
-            // save log in state to redux
-            dispatch({
-              type: "LOGGED_IN_USER",
-              payload: { user: res.data },
-            });
-            // window.location.href = res.data;
-            history.push("/dashboard/seller");
-          } else {
-            toast.error("Error getting profile in - Please relogin");
-          }
+          // let res = await apiAuth.getProfile();
+          // console.log("profile response", res.data);
+          // if (res.data) {
+          //   console.log("Stripecall back LOGGED IN SUCCESSFULL ===> ");
+          //   // save log in state to redux
+          //   dispatch({
+          //     type: "LOGGED_IN_USER",
+          //     payload: { user: res.data },
+          //   });
+          //   // window.location.href = res.data;
+          //   history.push("/dashboard/seller");
+          // } else {
+          //   toast.error("Error getting profile in - Please relogin");
+          // }
+          history.push("/dashboard/seller");
         }
       } catch (err) {
         console.log(err);
