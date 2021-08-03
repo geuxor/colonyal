@@ -120,7 +120,7 @@ const logoutUser = (req, res) => {
       res.sendStatus(200) //.send('CLEARED');
     }
   });
-  }, 3000);
+  }, 1000);
 };
 
 module.exports = { getUsers, addUser, loginUser, logoutUser, getUserProfile };

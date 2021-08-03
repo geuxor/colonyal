@@ -25,6 +25,8 @@ router.post('/stripe/test', authMiddleware, stripeController.testAccountBalance)
 //product routes
 
 const productController = require('./controllers/product.controller')
+router.post("/products", authMiddleware, productController.allProducts);
+router.post("/products/mine", authMiddleware, productController.mineProducts);
 router.post("/products/new", authMiddleware, productController.addProduct);
 router.post("/products/only", authMiddleware, productController.addOnlyProduct);
 

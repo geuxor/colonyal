@@ -39,13 +39,13 @@ function UserModel(seq, types) {
     avatar: {
       type: types.STRING
     },
-    stripe_account_id: {
-      type: types.STRING,
-      unique: true
-    },
-    product_id: {
-      type: types.ARRAY(types.INTEGER)
-    },
+    // stripe_account_id: {
+    //   type: types.STRING,
+    //   unique: true
+    // },
+    // product_id: {
+    //   type: types.ARRAY(types.INTEGER)
+    // },
     // stripe_seller: {
     //   type: types.STRING
     // },
@@ -69,18 +69,19 @@ function UserModel(seq, types) {
     //     }
     //   }
   });
+
+  User.associate = function (models) {
+    User.belongsTo(models.StripeData, {
+      foreignKey: 'stripe_account_id'
+    })
+    User.hasMany(models.Product);
+  };
   return User
 }
 
-UserModel.associate = function (models) {
-  User.hasOne(models.StripeData, {
-    foreignKey: 'stripe_account_id'
-  });
-  User.hasMany(models.Products, {
-    foreignKey: 'user_id'
-  });
-};
-
+// {
+//   foreignKey: 'stripe_account_id'
+// // }
 
 module.exports = UserModel
 
@@ -88,4 +89,7 @@ module.exports = UserModel
 //   User.hasOne(models.Stripe, {
 //     foreignKey: 'stripe_acct_id',
 //   })
-// },
+// // },
+//   , {
+//   foreignKey: 'created_by'
+// }

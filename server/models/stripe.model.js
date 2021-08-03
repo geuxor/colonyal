@@ -53,14 +53,17 @@ function StripeDataModel(seq, types) {
       timestamps: types.DATE
   }, {
   });
+  StripeData.associate = function (models) {
+    StripeData.hasOne(models.User, {
+      foreignKey: 'stripe_account_id'
+    });
+  };
   return StripeData
 }
 
-StripeDataModel.associate = function (models) {
-  StripeData.belongsTo(models.User);
-};
 
-// foreignKey: 'user_id',
+
+
 
 module.exports = StripeDataModel
 
