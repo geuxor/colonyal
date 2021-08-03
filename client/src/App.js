@@ -21,6 +21,9 @@ import StripeCallback from './components/Stripe/StripeCallback.component';
 import Cloudinary from './components/Cloudinary'
 import Products from './Products/Products.component';
 import NewProduct from './Products/NewProduct.component'
+import ViewProduct from './Products/ViewProduct.component';
+import StripeSuccess from './components/Stripe/StripeSuccess.component'
+import StripeFailure from './components/Stripe/StripeFailure.component'
 
 function App() {
   // const user = useSelector((state) => state.user);
@@ -87,10 +90,13 @@ function App() {
           <Route exact path="/register" component={Register} />
           <Route exact path="/products" component={Products} />
           <PrivateRoute exact path="/products/new" component={NewProduct} />
+          <Route exact path="/product/:productId" component={ViewProduct} />
           <PrivateRoute exact path="/dashboard/buyer" component={DashboardBuyer} />
           <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
           <Route exact path="/stripe/callback" component={StripeCallback} />
-          <Redirect from="/" to="/" exact />
+            <PrivateRoute exact path="/stripe/success/:productId" component={StripeSuccess}/>
+            <PrivateRoute exact path="/stripe/failure" component={StripeFailure} />
+            <Redirect from="/" to="/products" exact />
         </Switch>
       </BrowserRouter>
       ) : (<p>im loading...</p>)}

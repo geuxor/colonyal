@@ -9,6 +9,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 //cloudinary
+import { useHistory } from "react-router-dom";
 import { AdvancedImage } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/base/assets/CloudinaryImage";
 import URLConfig from "@cloudinary/base/config/URLConfig";
@@ -17,6 +18,7 @@ import { thumbnail } from "@cloudinary/base/actions/resize";
 import { focusOn } from "@cloudinary/base/qualifiers/gravity";
 import { face } from "@cloudinary/base/qualifiers/focusOn";
 import { byRadius } from "@cloudinary/base/actions/roundCorners";
+import { useDispatch } from "react-redux";
 
 const { Meta } = Card;
 
@@ -24,6 +26,23 @@ function DesignCard({ p }) {
   let cloudConfig = new CloudConfig({ cloudName: "geuxor" });
   let urlConfig = new URLConfig({ secure: true });
   let myImage = new CloudinaryImage(p.image, cloudConfig, urlConfig);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  
+  const handleBook = async (e) => {
+    // e.preventDefault();
+    console.log('dispatching product', p.id);
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: { product: { ...p } },
+        });
+    history.push(`/product/${p.id}`);
+    //if user is loggedin
+    // //get session from stripe and to show a btn > checkout with
+    // console.log('you click to buy', p)
+    // const res = await apiStripe.getSessionId(p);
+    // console.log('Stripe Session ID received: -', res.data);
+  };
 
   return (
     <>
@@ -61,7 +80,7 @@ function DesignCard({ p }) {
                 </div>
               </div>
             </div>
-            <button className="btn-small btn-color px-1">Add to Cart</button>
+            <button onClick={handleBook} className="btn-small btn-color px-1">Buy Now</button>
           </div>
         </div>
       </div>

@@ -53,4 +53,12 @@ apiStripe.payoutSetting = async (user) =>
   await axios.post(
     `${process.env.REACT_APP_API}/stripe/payout-setting`, user, options);
 
+apiStripe.getSessionId = async (productId) =>
+  await axios.post(
+    `${process.env.REACT_APP_API}/stripe/session`, productId, options);
+
+apiStripe.stripeSuccessRequest = async (productId) =>
+  await axios.post(`${process.env.REACT_APP_API}/stripe/success`, productId, options);
+
+
 export default apiStripe

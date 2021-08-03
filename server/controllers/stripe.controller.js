@@ -66,25 +66,30 @@ async function createConnectAccount(req, res, next) {
         console.log('<<<<  ready to update >>>> User ', user.id, ' >>>> with <<<< ', stripeAccount.id, '>>>>');
         user.stripe_account_id = stripeAccount.id
 
-        //updating User table
-        const userUpdateResult = await db.User.update(
-          { stripe_account_id: stripeAccount.id },
-          {
-            where: { id: user.id }
-          })
-        console.log('updated', userUpdateResult)
-        user.stripe_account_id ? response = 'ok' : ''
-        console.log('###### User updated with', user.stripe_account_id, '====>', response)
+        //updating User table //??? it really doens't like doing this when association is in place
+        // insert or update on table "Users" violates foreign key constraint "Users_stripe_account_id_fkey"
+        // const userUpdateResult = await db.User.update(
+        //   { stripe_account_id: stripeAccount.id },
+        //   {
+        //     where: { id: user.id }
+        //   })
+        // console.log('updated', userUpdateResult)
+        // user.stripe_account_id ? response = 'ok' : ''
+        // console.log('###### User updated with', user.stripe_account_id, '====>', response)
 
         //updating Stripe Table
         console.log('<<<<  ready to update >>>>  StripeData ', user.id, '>>>> with <<<< ', stripeAccount.id, '>>>>');
+        //??? why isn't User/stripe_account_id updated after creating this?
         const stripeUpdateResult = await db.StripeData.create(
           {
             stripe_account_id: stripeAccount.id,
             stripe_user_id: user.id
           })
-        db.StripeData.stripe_account_id ? response = 'ok' : ''
-        console.log('###### StripeData updated with', stripeUpdateResult.stripe_account_id, 'and user', stripeUpdateResult.stripe_user_id, '====>', response)
+        await stripeUpdateResult.setUser(user.id)
+
+        console.log('stripeUpdateResult done');
+        db.StripeData.stripe_account_id ? stripeUpdateResult.res = 'ok' : ''
+        console.log('###### StripeData updated with', stripeUpdateResult.stripe_account_id, 'and user', stripeUpdateResult.stripe_user_id, '====>', res)
       }
       // } else {
       //   console.log('ERR ---> Stripe Account Already Created')
@@ -133,48 +138,59 @@ async function createConnectAccount(req, res, next) {
 }
 
 async function createSessionId(req, res, next) {
-  console.log('createSessionId', req.body);
-
-  let amount = req.body.amount;
-  let stripeUserId = req.body.stripeUserId;
+  console.log('createSessionId - buying productId: ', req.body.id);
+  const user = req.user
+  //get prod id from req.body
+  //find product based on id from db
+  const product = req.body
+  //20% fee
+  const fee = (product.price * process.env.STRIPE_PLATFORM_FEE) / 100
+  console.log('fee:',fee)
+  // createa a session
   try {
+    // const findUser = await db.User.findOne({ where: { id: product.UserId } });
+    console.log('yea, found a user for this product:', user.stripe_account_id);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      //purchasing items details, it will be shown to user on checkout
       line_items: [{
         price_data: {
           product_data: {
-            name: 'games'
+            name: product.title
           },
-          unit_amount: amount,
+          unit_amount: product.price * 100,
           currency: 'dkk'
         },
         quantity: 1
       }],
       mode: 'payment',
+      //create payment intent with app fee and destinaiton charge
       payment_intent_data: {
+        application_fee_amount: fee * 100,
+        //seller can see his balance in dashboard
         transfer_data: {
-          destination: stripeUserId
+          destination: user.stripe_account_id
         },
       },
-      success_url: 'http://localhost:3000/success',
-      cancel_url: 'http://localhost:3000/cancel'
+      success_url: process.env.STRIPE_SUCCESS_URL,
+      cancel_url: process.env.STRIPE_FAILURE_URL
     });
-    let sessionId = session.id;
-    console.log({ sessionId: sessionId })
-    res.status(200).json({ sessionId: sessionId })
+
+    // add session objecto to user in the db
+
+    const updatedStripeSessionId = await db.User.update({stripe_session_id: session.id},
+      {
+        where: { id: user.id },
+        plain: true
+      })
+    console.log('User with id:', user.id, ' updated stripe_session_id: ', updatedStripeSessionId)
+
+    // send session id to client to finalize payment
+    res.status(200).json({ sessionId: session.id, product: product })
   } catch (err) {
     err.raw.message ? errmsg = err.raw.message : errmsg = err
     console.log('500:', errmsg, err.raw.code);
     //unable to log all fields - why??
-    log({
-      file: 'stripe.controller.js',
-      line: '139',
-      user: stripeUserId,
-      info: errmsg,
-      code: err.raw.code,
-      type: err.type,
-      status_code: err.statusCode
-    }, logsModel);
     res.status(500).send(errmsg);
   }
 }
@@ -197,6 +213,10 @@ const getAccountStatus = async (req, res) => {
   console.log('********************* StripeController - getAccountStatus ****************', req.user.toJSON());
   // const user = await db.User.findOne({ where: { email: email } });
   const user = req.user
+  if (!user.stripe_account_id) {
+    console.log('No Stripe account found');
+    return res.status(200).send('No Stripe account found');
+  }
   try {
     const account = await updateDelayDaysAPI(user.stripe_account_id);
     // console.log("USER ACCOUNT UPDATED with 7 days payout >>>>>>>>>>>>>>>>>>>>>>", updatedAccount);
@@ -305,7 +325,7 @@ const getPayoutSetting = async (req, res) => {
 const testAccountBalance = async (req, res) => {
   const user = req.user
   // const user = await userModel.findById(req.user._id)
-try {
+  try {
     //how to define schema for array of objects???
     console.log('updatedStripeBalance');
     const updated = await db.StripeData.update(
@@ -323,4 +343,81 @@ try {
   }
 }
 
-module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, getPayoutSetting, testAccountBalance }
+const stripeSuccess = async (req, res) => {
+  const user = req.user
+  try {
+    // 1 get product id from req.body
+    const { productId } = req.body;
+    // 2 find currently logged in user
+    
+    // check if user has stripeSession
+    // if (!user.stripeSession) return;
+
+    // 3 retrieve stripe session, based on session id we previously save in user db
+    const session = await stripe.checkout.sessions.retrieve(
+      user.stripe_session_id
+    );
+    // 4 if session payment status is paid, create order
+    if (session.payment_status === "paid") {
+      // 5 check if order with that session id already exist by querying orders collection
+      // const orderExist = await Order.findOne({
+      //   "session.id": session.id,
+      // }).exec();
+      // if (orderExist) {
+      //   // 6 if order exist, send success true
+        res.json({ success: true });
+      // } else {
+      //   // 7 else create new order and send success true
+      //   let newOrder = await new Order({
+      //     product: productId,
+      //     session,
+      //     orderedBy: user._id,
+      //   }).save();
+        // 8 remove user's stripeSession
+      const updatedStripeSessionId = await db.User.update({ stripe_session_id: '' },
+        {
+          where: { id: user.id },
+          plain: true
+        })
+        res.json({ success: true });
+      }
+  } catch (err) {
+    console.log("STRIPE SUCCESS ERR", err);
+  }
+};
+
+module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, getPayoutSetting, testAccountBalance, stripeSuccess }
+
+
+
+// {
+//   id: 'cs_test_a1aUqO2yl3RqF7IO43pjhiTOGiMvvsluIOHQJUUN1SxU92lClX2Be4n6gL',
+//   object: 'checkout.session',
+//   allow_promotion_codes: null,
+//   amount_subtotal: 12300,
+//   amount_total: 12300,
+//   automatic_tax: { enabled: false, status: null },
+//   billing_address_collection: null,
+//   cancel_url: 'http://localhost:3000/stripe/failure',
+//   client_reference_id: null,
+//   currency: 'dkk',
+//   customer: null,
+//   customer_details: null,
+//   customer_email: null,
+//   livemode: false,
+//   locale: null,
+//   metadata: {},
+//   mode: 'payment',
+//   payment_intent: 'pi_3JKRWRAR2XieTSCl3F5CKfkB',
+//   payment_method_options: {},
+//   payment_method_types: [ 'card' ],
+//   payment_status: 'unpaid',
+//   setup_intent: null,
+//   shipping: null,
+//   shipping_address_collection: null,
+//   submit_type: null,
+//   subscription: null,
+//   success_url: 'http://localhost:3000/stripe/success',
+//   total_details: { amount_discount: 0, amount_shipping: 0, amount_tax: 0 },
+//   url: 'https://checkout.stripe.com/pay/cs_test_a1aUqO2yl3RqF7IO43pjhiTOGiMvvsluIOHQJUUN1SxU92lClX2Be4n6gL#fidkdWxOYHwnPyd1blpxYHZxWmxuYVZWRG5tc3RLRDBDRlZVQVJgYDNQMicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'
+// }

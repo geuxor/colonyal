@@ -52,11 +52,12 @@ function UserModel(seq, types) {
     // stripe_charges_enabled: {
     //   type: types.STRING
     // },
-
-    // stripeSession: {},
-    // stripe_registration_complete: {
-    //   type: types.BOOLEAN
-    // },
+    stripe_session_id: {
+      type: types.STRING
+    },
+    stripe_registration_complete: {
+      type: types.BOOLEAN
+    },
     timestamps: types.DATE
     // Sequelize.ENUM('value 1', 'value 2')
   }, {
