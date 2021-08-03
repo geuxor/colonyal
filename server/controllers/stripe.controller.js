@@ -145,7 +145,7 @@ async function createSessionId(req, res, next) {
   const product = req.body
   //20% fee
   const fee = (product.price * process.env.STRIPE_PLATFORM_FEE) / 100
-  console.log('fee:',fee)
+  console.log('fee:', fee)
   // createa a session
   try {
     // const findUser = await db.User.findOne({ where: { id: product.UserId } });
@@ -172,13 +172,13 @@ async function createSessionId(req, res, next) {
           destination: user.stripe_account_id
         },
       },
-      success_url: process.env.STRIPE_SUCCESS_URL,
+      success_url: `${process.env.STRIPE_SUCCESS_URL}/${product.id}`,
       cancel_url: process.env.STRIPE_FAILURE_URL
     });
 
     // add session objecto to user in the db
 
-    const updatedStripeSessionId = await db.User.update({stripe_session_id: session.id},
+    const updatedStripeSessionId = await db.User.update({ stripe_session_id: session.id },
       {
         where: { id: user.id },
         plain: true
@@ -344,12 +344,15 @@ const testAccountBalance = async (req, res) => {
 }
 
 const stripeSuccess = async (req, res) => {
+  console.log('stripeSuccess controller', req.body);
+
   const user = req.user
+  console.log('userId:', user.dataValues.id, '\n with session:', user.stripe_session_id, ' \n registration complete:', user.stripe_registration_complete);
   try {
     // 1 get product id from req.body
     const { productId } = req.body;
     // 2 find currently logged in user
-    
+
     // check if user has stripeSession
     // if (!user.stripeSession) return;
 
@@ -357,6 +360,7 @@ const stripeSuccess = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(
       user.stripe_session_id
     );
+    console.log('ID:', session.id, '\n -- res from stripe:', session.payment_status, '\n url', session.url);
     // 4 if session payment status is paid, create order
     if (session.payment_status === "paid") {
       // 5 check if order with that session id already exist by querying orders collection
@@ -365,7 +369,7 @@ const stripeSuccess = async (req, res) => {
       // }).exec();
       // if (orderExist) {
       //   // 6 if order exist, send success true
-        res.json({ success: true });
+      // res.json({ success: true });
       // } else {
       //   // 7 else create new order and send success true
       //   let newOrder = await new Order({
@@ -373,14 +377,18 @@ const stripeSuccess = async (req, res) => {
       //     session,
       //     orderedBy: user._id,
       //   }).save();
-        // 8 remove user's stripeSession
+      // 8 remove user's stripeSession
       const updatedStripeSessionId = await db.User.update({ stripe_session_id: '' },
         {
           where: { id: user.id },
           plain: true
         })
-        res.json({ success: true });
-      }
+      console.log('updatedStripeSessionId.....', updatedStripeSessionId);
+      res.json({ success: true });
+    } else {
+      console.log('stripe payment check failre - status is still unpaid');
+      res.json({ success: false });
+    }
   } catch (err) {
     console.log("STRIPE SUCCESS ERR", err);
   }

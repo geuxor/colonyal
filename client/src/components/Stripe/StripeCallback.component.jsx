@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 // import apiStripe from "../../ApiService/stripe";
-import apiAuth from "../../ApiService/auth";
+// import apiAuth from "../../ApiService/auth";
 // import { updateUserInLocalStorage } from "../../actions/auth";
 import DesignSpin from "../Design/Spin.component";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 const StripeCallback = () => {  //{ history }
   console.log("Stripe onboarding completed");
   // const store = useSelector((state) => ({ ...state }));
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {

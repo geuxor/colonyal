@@ -10,15 +10,6 @@ const options = {
   // xsrfHeaderName: 'X-XSRF-TOKEN',
 };
 
-const imageoptions = {
-  // headers: { 'X-Custom-Header': 'value' },
-  // headers: { 'Content-Type': 'application/json' },
-  method: 'post',
-  enctype: "multipart/form-data"
-  // xsrfCookieName: 'XSRF-TOKEN',
-  // xsrfHeaderName: 'X-XSRF-TOKEN',
-};
-
 apiProduct.createProduct = async (data) =>
   await axios.post(`${process.env.REACT_APP_API}/products/new`, data, options)
 

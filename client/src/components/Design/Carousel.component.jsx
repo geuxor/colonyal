@@ -6,10 +6,10 @@ import { AdvancedImage } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/base/assets/CloudinaryImage";
 import URLConfig from "@cloudinary/base/config/URLConfig";
 import CloudConfig from "@cloudinary/base/config/CloudConfig";
-import { thumbnail } from "@cloudinary/base/actions/resize";
-import { focusOn } from "@cloudinary/base/qualifiers/gravity";
-import { face } from "@cloudinary/base/qualifiers/focusOn";
-import { byRadius } from "@cloudinary/base/actions/roundCorners";
+// import { thumbnail } from "@cloudinary/base/actions/resize";
+// import { focusOn } from "@cloudinary/base/qualifiers/gravity";
+// import { face } from "@cloudinary/base/qualifiers/focusOn";
+// import { byRadius } from "@cloudinary/base/actions/roundCorners";
 
 function DesignCarousel({ carousel }) {
   let cloudConfig = new CloudConfig({ cloudName: "geuxor" });

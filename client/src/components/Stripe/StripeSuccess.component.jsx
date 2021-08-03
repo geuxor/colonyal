@@ -1,24 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { stripeSuccessRequest } from "../actions/stripe";
+import React, { useEffect } from "react";
+// import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import apiStripe from "../../ApiService/stripe"
 import { LoadingOutlined } from "@ant-design/icons";
 
 const StripeCancel = ({ match, history }) => {
-  const store = useSelector((state) => (state));
+  // const store = useSelector((state) => (state));
 
   useEffect(() => {
     // console.log(
     //   "send this productid to backend to create order",
     //   match.params.productId
     // );
-    stripeSuccessRequest(token, match.params.productId).then((res) => {
-      if (res.data.success) {
-        // console.log("stripe success response", res.data);
-        history.push("/dashboard");
-      } else {
-        history.push("/stripe/cancel");
-      }
-    });
+    console.log(match.params.productId);
+    console.log('Success: getting ready to stripeSuccessReques!');
+    const okres = true;
+    // apiStripe
+      // .stripeSuccessRequest({productId: match.params.productId})
+      // .then((res) => {
+
+        if (okres) {
+          // console.log("res.data.success : stripe success response", res.data);
+          toast.success("Your purchase has been successfull!");
+          setTimeout(() => {
+            history.push("/dashboard/seller");
+          }, 2000);
+        } else {
+          // console.log("stripe payment failure", res.data);
+          toast.error("Your purchase was declined - Please retry!");
+          setTimeout(() => {
+            history.push("/products");
+            // history.push("/stripe/failure");
+          }, 3000);
+        }
+      // });
   }, [match.params.productId]);
 
   return (

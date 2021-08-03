@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import PrivateRoute from "./components/PrivateRoute.component";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
 //hanlders
 import { get_cookie } from "./utils/cookieHandler";
@@ -94,8 +94,8 @@ function App() {
           <PrivateRoute exact path="/dashboard/buyer" component={DashboardBuyer} />
           <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
           <Route exact path="/stripe/callback" component={StripeCallback} />
-            <PrivateRoute exact path="/stripe/success/:productId" component={StripeSuccess}/>
-            <PrivateRoute exact path="/stripe/failure" component={StripeFailure} />
+            <Route exact path="/stripe/success/:productId" component={StripeSuccess}/>
+            <Route exact path="/stripe/failure" component={StripeFailure} />
             <Redirect from="/" to="/products" exact />
         </Switch>
       </BrowserRouter>

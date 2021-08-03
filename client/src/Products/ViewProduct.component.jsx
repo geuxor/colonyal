@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useStore } from "react-redux";
+// import { useStore } from "react-redux";
 import apiProduct from "../ApiService/products"
 import apiStripe from "../ApiService/stripe"
 import moment from "moment";
@@ -23,15 +23,16 @@ const ViewProduct = ({ match, history }) => {
     console.log("you click to buy", storeProduct);
     const res = await apiStripe.getSessionId(storeProduct);
     console.log('Stripe Session ID received: -', res.data);
-    setSessionId(res.data)
+    setSessionId(res.data.sessionId)
+    setLoading(false);
     // setImage(res.data.product.image);
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log('ready handle booking - sending prod to stripe');
-    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_SECRET_KEY);
+    console.log('ready handle booking - sending prod to stripe', sessionId);
+    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
     stripe
       .redirectToCheckout({
         sessionId: sessionId,

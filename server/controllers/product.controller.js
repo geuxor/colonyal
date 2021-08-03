@@ -1,7 +1,7 @@
 const db = require('../models/index')
 
 const allProducts = async (req, res) => {
-  console.log("allProducts: ", req.body);
+  console.log("allProducts - null req");
   try {
     const products = await db.Product.findAll(
       {
@@ -10,7 +10,7 @@ const allProducts = async (req, res) => {
           attributes: ['firstname']
         } //include: [db.User]
      });
-     console.log(products);
+    console.log('allProducts: found a total of', products.length);
     
     res.status(201).json(products);
   } catch (err) {

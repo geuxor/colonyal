@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import DashboardBanner from "./DashboardBanner.component";
 import DashboardNav from "./DashboardNav.component";
 import DesignSpin from "../Design/Spin.component";
-import MyProducts from './DashboardProducts.component';
+// import MyProducts from './DashboardProducts.component';
 
 const DashboardSeller = () => {
   const dispatch = useDispatch();

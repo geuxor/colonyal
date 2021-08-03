@@ -7,10 +7,10 @@ import { AdvancedImage } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/base/assets/CloudinaryImage";
 import URLConfig from "@cloudinary/base/config/URLConfig";
 import CloudConfig from "@cloudinary/base/config/CloudConfig";
-import { thumbnail } from "@cloudinary/base/actions/resize";
-import { focusOn } from "@cloudinary/base/qualifiers/gravity";
-import { face } from "@cloudinary/base/qualifiers/focusOn";
-import { byRadius } from "@cloudinary/base/actions/roundCorners";
+// import { thumbnail } from "@cloudinary/base/actions/resize";
+// import { focusOn } from "@cloudinary/base/qualifiers/gravity";
+// import { face } from "@cloudinary/base/qualifiers/focusOn";
+// import { byRadius } from "@cloudinary/base/actions/roundCorners";
 
 const SmallCard = ({
   p,
@@ -44,7 +44,7 @@ const SmallCard = ({
                 {p.title}{" "}
                 <span className="float-right text-primary">
                   {apiStripe.currencyFormatter({
-                    amount: p.price,
+                    amount: p.price * 100,
                     currency: "dkk",
                   })}
                 </span>{" "}
