@@ -18,8 +18,10 @@ import Admin from './components/Admin/Admin.component';
 import DashboardBuyer from './components/Dashboard/DashboardBuyer.component';
 import DashboardSeller from './components/Dashboard/DashboardSeller.component';
 import StripeCallback from './components/Stripe/StripeCallback.component';
-import NewProduct from './Products/NewProduct.component'
 import Cloudinary from './components/Cloudinary'
+import Products from './Products/Products.component';
+import NewProduct from './Products/NewProduct.component'
+
 function App() {
   // const user = useSelector((state) => state.user);
   // const [{ user, isLoggedIn }, dispatch] = useStateValue();
@@ -83,6 +85,7 @@ function App() {
           <PrivateRoute exact path="/admin" component={Admin} />
           <Route path="/logout" component={LogOut} />
           <Route exact path="/register" component={Register} />
+          <Route exact path="/products" component={Products} />
           <PrivateRoute exact path="/products/new" component={NewProduct} />
           <PrivateRoute exact path="/dashboard/buyer" component={DashboardBuyer} />
           <PrivateRoute exact path="/dashboard/seller" component={DashboardSeller} />
@@ -134,6 +137,7 @@ export default App;
 //separate useEffect to a new function
 // import { StatusCheck } from "./auth/StatusCheck"
 // import Cloudinary from './components/Cloudinary';
+// import Products from './Products/Products.component';
 // (async () => {
 //   try {
 //     const status = await StatusCheck()

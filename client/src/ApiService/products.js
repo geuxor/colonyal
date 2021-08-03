@@ -29,7 +29,10 @@ apiProduct.createOnlyProduct = async (data) =>
   await axios.post(`${process.env.REACT_APP_API}/products/only`, data, options)
 
 apiProduct.allProducts = async () =>
-  await axios.get(`${process.env.REACT_APP_API}/products`);
+  await axios.post(`${process.env.REACT_APP_API}/products`, null, options)
+
+apiProduct.mineProducts = async () =>
+  await axios.post(`${process.env.REACT_APP_API}/products/mine`, null, options)
 
 apiProduct.diffDays = (from, to) => {
   const day = 24 * 60 * 60 * 1000;

@@ -20,7 +20,7 @@ const Navbar = () => {
           <Link className="nav-link p-2" to="/stripe/callback">
             stripeCallback
           </Link>
-          <Link className="nav-link p-2" to="/">
+          <Link className="nav-link p-2" to="/products">
             Products
           </Link>
           <Link className="nav-link p-2" to="/admin">

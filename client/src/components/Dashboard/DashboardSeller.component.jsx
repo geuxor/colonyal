@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import DashboardBanner from "./DashboardBanner.component";
 import DashboardNav from "./DashboardNav.component";
 import DesignSpin from "../Design/Spin.component";
+import MyProducts from './DashboardProducts.component';
 
 const DashboardSeller = () => {
   const dispatch = useDispatch();
@@ -86,6 +87,9 @@ const DashboardSeller = () => {
         <Link to="/products/new" className="btn btn-primary">
           + Add New Product
         </Link>
+      </div>
+      <div className="col-md-2">
+
       </div>
     </div>
   );
