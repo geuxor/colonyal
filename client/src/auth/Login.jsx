@@ -1,4 +1,4 @@
-import { get_cookie } from '../utils/cookieHandler'
+import { get_cookie } from "../utils/cookieHandler";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import apiAuth from "../ApiService/auth";
@@ -6,7 +6,7 @@ import LoginForm from "../components/LoginForm.component";
 import { useDispatch } from "react-redux";
 
 const Login = ({ history }) => {
-  console.log("welcome to login");
+  console.log("Login: welcome");
   const [email, setEmail] = useState("x@x.ggg");
   const [password, setPassword] = useState("1234");
   const dispatch = useDispatch();
@@ -21,20 +21,17 @@ const Login = ({ history }) => {
       if (res.data && res.data.email === email) {
         console.log("LOGGIN SUCCESSFULL ===> ");
         console.log(res.data);
-        //cookie read
-        const mycookie = get_cookie()
+        const mycookie = get_cookie();
         console.log("newcookie", mycookie);
         if (mycookie) {
-          // save log in state to redux
           dispatch({
             type: "LOGGED_IN_USER",
-            payload: { user: {...res.data}}
+            payload: { user: { ...res.data } },
           });
           history.push("/dashboard/buyer");
         } else {
-          toast.error('Error logging in');
+          toast.error("Error logging in");
         }
-        
       }
     } catch (err) {
       console.log(err);

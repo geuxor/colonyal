@@ -6,7 +6,7 @@ function UserModel(seq, types) {
     email: {
       type: types.STRING,
       allowNull: false,
-      unique: true, //unique: email
+      unique: true,
       isEmail: {
         msg: "Must be an email"
       },
@@ -39,23 +39,13 @@ function UserModel(seq, types) {
     avatar: {
       type: types.STRING
     },
-    stripe_account_id: {
-      type: types.STRING,
-      unique: true
+    stripe_session_id: {
+      type: types.STRING
     },
-    // stripe_seller: {
-    //   type: types.STRING
-    // },
-    // stripe_charges_enabled: {
-    //   type: types.STRING
-    // },
-
-    // stripeSession: {},
-    // stripe_registration_complete: {
-    //   type: types.BOOLEAN
-    // },
+    stripe_registration_complete: {
+      type: types.BOOLEAN
+    },
     timestamps: types.DATE
-    // Sequelize.ENUM('value 1', 'value 2')
   }, {
     // {
     //   validate: {
@@ -66,22 +56,14 @@ function UserModel(seq, types) {
     //     }
     //   }
   });
+
+  User.associate = function (models) {
+    User.belongsTo(models.StripeData, {
+      foreignKey: 'stripe_account_id'
+    })
+    User.hasMany(models.Product);
+  };
   return User
 }
-UserModel.associate = function (models) {
-  User.hasOne(models.StripeData, {
-    foreignKey: 'stripe_account_id'
-  });
-  User.hasMany(models.Product, {
-    foreignKey: 'product_id'
-  });
-};
-
 
 module.exports = UserModel
-
-// associate: (models) => {
-//   User.hasOne(models.Stripe, {
-//     foreignKey: 'stripe_acct_id',
-//   })
-// },

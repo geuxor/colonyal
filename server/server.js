@@ -12,7 +12,7 @@ const { sequelize } = require('./models/index')
 require('dotenv').config()
 
 const corsConfig = {
-  origin: 'http://localhost:3000', //process.env.CLIENT_ORIGIN,
+  origin: process.env.CLIENT_ORIGIN,
   credentials: true,
 };
 
@@ -36,13 +36,8 @@ app.use(
   })
 );
 redisClient.on('server: error', console.error)
-// console.log(redisClient._events.data);
-
 
 app.use(router);
-// app.get('/stripe', (req, res) => {
-//   console.log('i found stripe!')
-// })
 app.get('*', (req, res) => {
   res.status(404).send('server ERR:                   🌵 No Route found');
 });

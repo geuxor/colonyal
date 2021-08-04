@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const stripeController = require('../controllers/stripe.controller')
-// const { requireSignin } = require('../middlewares/stripe.mw')
+
 const authMiddleware = require('../middlewares/auth.mw');
 console.log('routes:                       💫 importing stripe routes');
 

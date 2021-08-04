@@ -6,9 +6,8 @@ import { useLogOut } from "../../auth/Logout";
 
 const Navbar = () => {
   const loggedIn = useSelector((state) => state.loggedIn);
-  console.log("Navbar: user is", loggedIn);
+  console.log("Navbar: user is loggedin:", loggedIn);
   const { logoutUser } = useLogOut();
-    //  const dispatch = useDispatch();
  
   return (
     <div className="nav bg-light d-flex justify-content-center">
@@ -20,7 +19,7 @@ const Navbar = () => {
           <Link className="nav-link p-2" to="/stripe/callback">
             stripeCallback
           </Link>
-          <Link className="nav-link p-2" to="/">
+          <Link className="nav-link p-2" to="/products">
             Products
           </Link>
           <Link className="nav-link p-2" to="/admin">
@@ -29,8 +28,11 @@ const Navbar = () => {
           <Link className="nav-link m-2" to="/dashboard/buyer">
             Dashboard
           </Link>
-          <Link className="nav-link" to="/stripe/callback">
-            StripeCallback
+          <Link className="nav-link" to="/products/new">
+            Add Product
+          </Link>
+          <Link className="nav-link" to="/cloudinary">
+            Cloudinary
           </Link>
 
           <Button
@@ -38,7 +40,7 @@ const Navbar = () => {
             component={NavLink}
             color="white"
             to="/logout"
-            // here now you can safely logout user since no hooks are being called
+            // you can safely logout user since no hooks are being called
             onClick={function () {
               logoutUser();
             }}
@@ -67,34 +69,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// <Link to="/logout">Logout</Link>;
-// <button onClick={Logout} className="nav-link">
-//   Logout
-// </button>;
-
-  //Logout Function
-  // const logout = useLogout();
-  // const history = useHistory();
-  // const dispatch = useDispatch();
-
-  // const Logout = async () => {
-  //   console.log("LOGOUT");
-
-  //   try {
-  //     console.log("logged out?-----------------");
-  //     delete_cookie();
-  //     let res = await apiAuth.logout();
-  //     console.log("logout response", res);
-  //     dispatch({
-  //       type: "LOGOUT",
-  //     });
-
-  //     history.push("/login");
-  //   } catch (err) {
-  //     console.log("Error fetching users:", err.response.data);
-  //     // history.push("/login");
-  //     if (err.response && err.response.status >= 400)
-  //       toast.error(err.response.data);
-  //   }
-  // };

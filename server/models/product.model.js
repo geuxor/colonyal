@@ -18,9 +18,6 @@ function ProductModel(seq, types) {
       type: types.INTEGER,
       allowNull: false
     },
-    created_by: {
-      type: types.STRING,
-    },
     image: {
       type: types.STRING,
     },
@@ -34,15 +31,15 @@ function ProductModel(seq, types) {
       type: types.INTEGER
     },
     timestamps: types.DATE
-  }, {
-  });
+  },
+    {
+
+    });
+  Product.associate = function (models) {
+    Product.belongsTo(models.User);
+  };
   return Product
-}
-ProductModel.associate = function (models) {
-  Product.belongsTo(models.User);
-  Product.hasMany(models.Category, {
-    foreignKey: 'category_id'
-  });
 };
+
 
 module.exports = ProductModel

@@ -1,4 +1,3 @@
-
 console.log('model:                       🙋‍♂️ entering StripeData.model');
 
 function StripeDataModel(seq, types) {
@@ -50,40 +49,15 @@ function StripeDataModel(seq, types) {
     fields_needed: {
       type: types.ARRAY(types.STRING)
     },
-    timestamps: types.DATE
+      timestamps: types.DATE
   }, {
   });
+  StripeData.associate = function (models) {
+    StripeData.hasOne(models.User, {
+      foreignKey: 'stripe_account_id'
+    });
+  };
   return StripeData
 }
 
-StripeDataModel.associate = function (models) {
-  StripeData.belongsTo(models.User);
-};
-
-// foreignKey: 'user_id',
-
 module.exports = StripeDataModel
-
-// user_id: {
-//   type: types.STRING,
-//     allowNull: false,
-//       unique: true,
-//     },
-
-// balance_pending: {
-//   type: types.STRING,
-//     get: function () {
-//       return JSON.parse(this.getDataValue('balance_pending'));
-//     },
-//   set: function (val) {
-//     return this.setDataValue('balance_pending', JSON.stringify(val));
-//   }
-// },
-
-
-
-
-        // object: 'balance',
-        // available: [{ amount: 0, currency: 'dkk', source_types: [Object] }],
-        // livemode: false,
-        // pending: [{ amount: 0, currency: 'dkk', source_types: [Object] }]

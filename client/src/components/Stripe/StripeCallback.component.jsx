@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 // import apiStripe from "../../ApiService/stripe";
-import apiAuth from "../../ApiService/auth";
+// import apiAuth from "../../ApiService/auth";
 // import { updateUserInLocalStorage } from "../../actions/auth";
 import DesignSpin from "../Design/Spin.component";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 const StripeCallback = () => {  //{ history }
   console.log("Stripe onboarding completed");
   // const store = useSelector((state) => ({ ...state }));
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
@@ -23,24 +23,25 @@ const StripeCallback = () => {  //{ history }
 
     (async () => {
       try {
-        console.log('fetching profile');        
+        console.log("fetching profile");
         const sid = get_cookie();
         console.log("read the cookie:", sid);
         if (sid) {
-        let res = await apiAuth.getProfile();
-        console.log("profile response", res.data);
-        if (res.data) {
-          console.log("LOGGED IN SUCCESSFULL ===> ");
-         // save log in state to redux
-            dispatch({
-              type: "LOGGED_IN_USER",
-              payload: { user: res.data },
-            });
-                  // window.location.href = res.data;
-            history.push("/dashboard/seller");
-          } else {
-            toast.error("Error getting profile in - Please relogin");
-          }
+          // let res = await apiAuth.getProfile();
+          // console.log("profile response", res.data);
+          // if (res.data) {
+          //   console.log("Stripecall back LOGGED IN SUCCESSFULL ===> ");
+          //   // save log in state to redux
+          //   dispatch({
+          //     type: "LOGGED_IN_USER",
+          //     payload: { user: res.data },
+          //   });
+          //   // window.location.href = res.data;
+          //   history.push("/dashboard/seller");
+          // } else {
+          //   toast.error("Error getting profile in - Please relogin");
+          // }
+          history.push("/dashboard/seller");
         }
       } catch (err) {
         console.log(err);
@@ -48,6 +49,7 @@ const StripeCallback = () => {  //{ history }
           toast.error(err.response.data);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const accountStatus = async () => {

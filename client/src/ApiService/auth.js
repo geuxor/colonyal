@@ -17,7 +17,7 @@ apiAuth.getStatus = async (sid) => {
 };
 
 apiAuth.getProfile = async (sid) => {
-  return await axios.post(`${process.env.REACT_APP_API}/profile`, sid, options);
+  return await axios.post(`${process.env.REACT_APP_API}/profile`, null, options);
 };
 
 apiAuth.registerUser = async (user) => {

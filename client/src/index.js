@@ -11,8 +11,7 @@ import { authReducer } from './reducers/auth';
 
 //create redux store
 const Store = createStore(authReducer, composeWithDevTools())
-// const { user }: { user: State } = useSelector((state: any) => state.user);
-//provide redux store   to the whole app
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={Store}>

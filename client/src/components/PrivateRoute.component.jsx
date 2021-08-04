@@ -2,8 +2,12 @@ import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-const { loggedIn } = useSelector((state) => ({ ...state }));
-console.log('privateRoute loggedIn?', loggedIn);
+  const { loggedIn } = useSelector((state) => ({ ...state }));
+
+  loggedIn
+    ? console.log("privateRoute: loggedIn!")
+    : console.log("privateRoute: NOT loggedIn! - redirect to Login");
+
   return (
     <Route
       {...rest}
