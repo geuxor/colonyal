@@ -1,4 +1,3 @@
-
 console.log('model:                       🙋‍♂️ entering StripeData.model');
 
 function StripeDataModel(seq, types) {
@@ -61,31 +60,4 @@ function StripeDataModel(seq, types) {
   return StripeData
 }
 
-
-
-
-
 module.exports = StripeDataModel
-
-// user_id: {
-//   type: types.STRING,
-//     allowNull: false,
-//       unique: true,
-//     },
-
-        // object: 'balance',
-        // available: [{ amount: 0, currency: 'dkk', source_types: [Object] }],
-        // livemode: false,
-        // pending: [{ amount: 0, currency: 'dkk', source_types: [Object] }]
-
-
-// balance_pending: {
-//   type: types.STRING,
-//     get: function () {
-//       return JSON.parse(this.getDataValue('balance_pending'));
-//     },
-//   set: function (val) {
-//     console.log(val)
-//     return this.setDataValue('balance_pending', JSON.stringify(val));
-//   }
-// },

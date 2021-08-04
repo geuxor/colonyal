@@ -1,7 +1,3 @@
-// const multer = require('multer');
-// const fs = require('fs');
-// const upload = multer({ dest: './tmp/' });
-
 console.log('                                 🚽 entering productMiddelWare')
 
 const productCreatedby = async (req, res, next) => {
@@ -32,7 +28,6 @@ const productCreatedby = async (req, res, next) => {
     // if (!owner) {
     //   return res.status(403).send("Unauthorized");
     // }
-    // next();
 
     const { product_id } = req.body;
     console.log('product_id', uid);

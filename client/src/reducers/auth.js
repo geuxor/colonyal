@@ -1,5 +1,3 @@
-//create user reducer function { type: 'LOGGEDINUSER', payload: {name: 'xx', role:'seller'}}
-
 let initialUserState = { loggedIn: false, user: null, product: null }
 
 export const authReducer = (state = initialUserState, action) => {
@@ -13,7 +11,6 @@ export const authReducer = (state = initialUserState, action) => {
         balance: {...state.balance, ...action.payload.balance },
         product: { ...action.payload.product }
       }
-    // action.payload //return { ...state, ...action.payload };
     case 'LOGOUT':
       return initialUserState;
     case 'UPDATE_USER':
@@ -25,11 +22,3 @@ export const authReducer = (state = initialUserState, action) => {
       return state;
   }
 }
-
-
-//  case "LOGGED_IN_USER":
-// return {
-//   ...state,
-//   loggedIn: true,
-//   user: action.payload
-// }

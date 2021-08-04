@@ -4,9 +4,6 @@ import apiProduct from "../ApiService/products";
 import { useSelector } from "react-redux";
 import { ProductCreateForm } from "../Forms/NewProduct.Form";
 
-//cloudinary
-// import { Cloudinary } from "@cloudinary/base";
-
 const NewProduct = () => {
   const store = useSelector((state) => ({ ...state }));
 
@@ -26,7 +23,6 @@ const NewProduct = () => {
     quantity: 10,
   });
 
-  // destructuring variables from state
   const { title, description, price, from, to, quantity } = values;
 
   const handleSubmit = async (e) => {
@@ -39,18 +35,6 @@ const NewProduct = () => {
       uploadData.append("upload_preset", "mzgc3fjp");
       const res = await apiProduct.uploadImage(uploadData);
       console.log(res.data.public_id);
-
-      //save to db
-      // const productData = new FormData();
-      // productData.append("title", title);
-      // productData.append("description", description);
-      // productData.append("price", price);
-      // // productData.append("location", location);
-      // image && productData.append("image", res.data.public_id);
-      // // productData.append("from", from);
-      // // productData.append("to", to);
-      // // productData.append("quantity", quantity);
-      // // productData.append("email", store.user.email);
       const productData = {
         title,
         description,
@@ -75,9 +59,6 @@ const NewProduct = () => {
         quantity: 0,
       });
       setUpload("");
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 2300);
     } catch (err) {
       console.log(err);
       toast.error(err.response.data);
@@ -104,7 +85,6 @@ const NewProduct = () => {
     console.log(files[0]);
     setImage(files[0]);
     setPreview(URL.createObjectURL(files[0]));
-    // setValues({ ...values, image: e.target.files[0] });
   };
 
   const handleChange = (e) => {

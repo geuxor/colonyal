@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { useStore } from "react-redux";
 import apiProduct from "../ApiService/products"
 import apiStripe from "../ApiService/stripe"
 import moment from "moment";
@@ -25,7 +24,6 @@ const ViewProduct = ({ match, history }) => {
     console.log('Stripe Session ID received: -', res.data);
     setSessionId(res.data.sessionId)
     setLoading(false);
-    // setImage(res.data.product.image);
   };
 
   const handleClick = async (e) => {

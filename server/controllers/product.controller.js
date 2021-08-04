@@ -25,8 +25,8 @@ const mineProducts = async (req, res) => {
   console.log("MINE Products =>: ", req.body);
   const user = req.user
   try {
-    // const products = await db.Product.findAll({ where: { user_id: user.id } });
-    // res.status(201).json(products);
+    const products = await db.Product.findAll({ where: { user_id: user.id } });
+    res.status(201).json(products);
   } catch (err) {
     console.log("find all MINE products err => ", err);
     res.status(400).json({
@@ -34,7 +34,6 @@ const mineProducts = async (req, res) => {
     });
   }
 }
-
 
 const addOnlyProduct = async (req, res) => {
   console.log("addProduct: ", req.body);
@@ -55,15 +54,8 @@ const addProduct = async (req, res) => {
   req.body.UserId = user.id
   console.log('## ===>', req.body.UserId)
   try {
-    // const dbuser = await db.User.findOne({ 
-    //   where: { id: user.id },
-    //   include: ['Product'] //db.Product
-    // });
-
-    //user.getProducts / adds special methods
-    
     const product = await db.Product.create(req.body);
-    //??? its replacing all other previous values
+    //??? replace all previous values
     // const updateUser = await db.User.update(
     //   { product_id: db.Sequelize.fn('array_append', db.Sequelize.col('product_id'), product.id) },
     //   //   product_id: [product.id],

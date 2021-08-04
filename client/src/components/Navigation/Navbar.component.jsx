@@ -8,7 +8,6 @@ const Navbar = () => {
   const loggedIn = useSelector((state) => state.loggedIn);
   console.log("Navbar: user is loggedin:", loggedIn);
   const { logoutUser } = useLogOut();
-    //  const dispatch = useDispatch();
  
   return (
     <div className="nav bg-light d-flex justify-content-center">
@@ -41,7 +40,7 @@ const Navbar = () => {
             component={NavLink}
             color="white"
             to="/logout"
-            // here now you can safely logout user since no hooks are being called
+            // you can safely logout user since no hooks are being called
             onClick={function () {
               logoutUser();
             }}
@@ -70,34 +69,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// <Link to="/logout">Logout</Link>;
-// <button onClick={Logout} className="nav-link">
-//   Logout
-// </button>;
-
-  //Logout Function
-  // const logout = useLogout();
-  // const history = useHistory();
-  // const dispatch = useDispatch();
-
-  // const Logout = async () => {
-  //   console.log("LOGOUT");
-
-  //   try {
-  //     console.log("logged out?-----------------");
-  //     delete_cookie();
-  //     let res = await apiAuth.logout();
-  //     console.log("logout response", res);
-  //     dispatch({
-  //       type: "LOGOUT",
-  //     });
-
-  //     history.push("/login");
-  //   } catch (err) {
-  //     console.log("Error fetching users:", err.response.data);
-  //     // history.push("/login");
-  //     if (err.response && err.response.status >= 400)
-  //       toast.error(err.response.data);
-  //   }
-  // };

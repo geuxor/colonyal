@@ -1,23 +1,12 @@
 import moment from "moment";
 import "./Card.component.scss";
-// import apiStripe from "../../ApiService/stripe";
 import React from "react";
 import { Card, Avatar } from "antd";
-// import {
-//   EditOutlined,
-//   EllipsisOutlined,
-//   SettingOutlined,
-// } from "@ant-design/icons";
-//cloudinary
 import { useHistory } from "react-router-dom";
 import { AdvancedImage } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/base/assets/CloudinaryImage";
 import URLConfig from "@cloudinary/base/config/URLConfig";
 import CloudConfig from "@cloudinary/base/config/CloudConfig";
-// import { thumbnail } from "@cloudinary/base/actions/resize";
-// import { focusOn } from "@cloudinary/base/qualifiers/gravity";
-// import { face } from "@cloudinary/base/qualifiers/focusOn";
-// import { byRadius } from "@cloudinary/base/actions/roundCorners";
 import { useDispatch } from "react-redux";
 
 const { Meta } = Card;
@@ -30,7 +19,6 @@ function DesignCard({ p }) {
   const dispatch = useDispatch();
   
   const handleBook = async (e) => {
-    // e.preventDefault();
     console.log('dispatching product', p.id);
         dispatch({
           type: "LOGGED_IN_USER",

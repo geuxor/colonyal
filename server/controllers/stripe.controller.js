@@ -1,55 +1,10 @@
 const db = require('../models/index')
-// const userModel = require('../models/user.model');
-// const stripeModel = require('../models/stripe.model')
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const queryString = require('query-string')
-// const logsModel = require('../models/log.model');
-// const log = require('../libs/log');
-
-//first make sure that a user, who adds a credit card, is already enrolled on your platform as a customer.
-// async function addCard(req, res) {
-//   //{ user, body: { cardToken } }
-//   console.log(req.params, req.body);
-//   const user = req.body.user
-//   const cardToken = req.body
-//   if (!user.stripeCustomerId) {
-//     const stripeCustomerId = await createCustomer(user.email);
-//     await User.findOneAndUpdate(
-//       { _id: user._id },
-//       { $set: { stripeCustomerId } },
-//     );
-//     return addCustomerCard(stripeCustomerId, cardToken);
-//   }
-//   return addCustomerCard(user.stripeCustomerId, cardToken);
-// };
-
-// async function getCards(req, res) {
-//   console.log(req.params, req.body);
-//   const user = req.body
-//   if (!user.stripeCustomerId) return [];
-//   return listCustomerCards(user.stripeCustomerId);
-// };
-
-
-// async function connectAccount(req, res) {
-//   console.log(req.params, req.body);
-//   const user = req.body.user
-//   const authorizationCode = req.body
-//   const { data: { stripe_user_id } } = await createConnectedAccount(authorizationCode);
-//   await User.findOneAndUpdate(
-//     { _id: user._id },
-//     { $set: { stripeAccountId: stripe_user_id } },
-//   );
-//   return { stripeAccountId: stripe_user_id };
-// };
 
 async function createConnectAccount(req, res, next) {
   console.log('********************* StripeController - createConnectAccount****************', req.user.toJSON());
   try {
-    //how to call user.controller to update the user instead of doing it from here? - need userID and stripeAccountID
-    // there is no difference between using await with exec() or without it. 
-    // does exactlythe same, but you get a better stack trace if any error happened
-    // const user = await db.User.findById(req.user._id)
     const user = req.user
     console.log('###### Found User with email:=====>', user.email)
     if (!user.stripe_account_id) {
@@ -66,20 +21,8 @@ async function createConnectAccount(req, res, next) {
         console.log('<<<<  ready to update >>>> User ', user.id, ' >>>> with <<<< ', stripeAccount.id, '>>>>');
         user.stripe_account_id = stripeAccount.id
 
-        //updating User table //??? it really doens't like doing this when association is in place
-        // insert or update on table "Users" violates foreign key constraint "Users_stripe_account_id_fkey"
-        // const userUpdateResult = await db.User.update(
-        //   { stripe_account_id: stripeAccount.id },
-        //   {
-        //     where: { id: user.id }
-        //   })
-        // console.log('updated', userUpdateResult)
-        // user.stripe_account_id ? response = 'ok' : ''
-        // console.log('###### User updated with', user.stripe_account_id, '====>', response)
-
         //updating Stripe Table
         console.log('<<<<  ready to update >>>>  StripeData ', user.id, '>>>> with <<<< ', stripeAccount.id, '>>>>');
-        //??? why isn't User/stripe_account_id updated after creating this?
         const stripeUpdateResult = await db.StripeData.create(
           {
             stripe_account_id: stripeAccount.id,
@@ -109,26 +52,14 @@ async function createConnectAccount(req, res, next) {
       "stripe_user[country]": user.country || undefined
     })
 
-    // console.log(`### stripe onboarding link: ========> ${accountLink.url}?${queryString.stringify(accountLink)}`)
     let link = `${accountLink.url}?${queryString.stringify(accountLink)}`;
-    // let link = `${JSON.stringify(accountLink.url)}?${JSON.stringify(accountLink)}`;
     console.log('###### stripe onboarding accountLink =========>>/n', link);
     res.status(201).send(link);
-    // res.send(link);
   } catch (err) {
     let errmsg = ''
     if (err.raw && err.raw.message) {
       console.log('>>>>', err.raw.statusCode, ':', err.raw.message)
-      //unable to log all fields - why??
-      log({
-        file: 'stripe.controller.js',
-        line: '104',
-        info: err,
-        code: err.raw.code,
-        message: err.raw.message,
-        type: err.raw.type,
-        status_code: err.raw.statusCode
-      }, logsModel);
+      //create a log for this error in db
       errmsg = err.raw.message
     } else {
       console.log(err)
@@ -143,12 +74,10 @@ async function createSessionId(req, res, next) {
   //get prod id from req.body
   //find product based on id from db
   const product = req.body
-  //20% fee
   const fee = (product.price * process.env.STRIPE_PLATFORM_FEE) / 100
   console.log('fee:', fee)
   // createa a session
   try {
-    // const findUser = await db.User.findOne({ where: { id: product.UserId } });
     console.log('yea, found a user for this product:', user.stripe_account_id);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -177,7 +106,6 @@ async function createSessionId(req, res, next) {
     });
 
     // add session objecto to user in the db
-
     const updatedStripeSessionId = await db.User.update({ stripe_session_id: session.id },
       {
         where: { id: user.id },
@@ -190,7 +118,7 @@ async function createSessionId(req, res, next) {
   } catch (err) {
     err.raw.message ? errmsg = err.raw.message : errmsg = err
     console.log('500:', errmsg, err.raw.code);
-    //unable to log all fields - why??
+    //log all fields
     res.status(500).send(errmsg);
   }
 }
@@ -211,7 +139,6 @@ const updateDelayDaysAPI = async (accountId) => {
 
 const getAccountStatus = async (req, res) => {
   console.log('********************* StripeController - getAccountStatus ****************', req.user.toJSON());
-  // const user = await db.User.findOne({ where: { email: email } });
   const user = req.user
   if (!user.stripe_account_id) {
     console.log('No Stripe account found');
@@ -250,9 +177,7 @@ const getAccountStatus = async (req, res) => {
         plain: true
       })
     console.log('updatedStripeData', updatedStripeData[1].dataValues);
-    //how to pass the obj to the client
     res.status(200).send(updatedStripeData[1])
-    // res.status(200).send(stripeDBdata);
     // res.send(Buffer.from(updatedStripeData))
   } catch (err) {
     console.log(err)
@@ -262,7 +187,6 @@ const getAccountStatus = async (req, res) => {
 
 const getAccountBalance = async (req, res) => {
   const user = req.user
-  // const user = await userModel.findById(req.user._id)
   console.log('stripe-controller: fetching stripe account balance', user.toJSON())
   if (!user) return null;
   try {
@@ -270,7 +194,6 @@ const getAccountBalance = async (req, res) => {
       stripe_account: user.stripe_account_id, //stripeAccount
     });
     console.log('balance is now::: ', balance.pending)
-    //how to define schema for array of objects???
     const updatedStripeBalance = await db.StripeData.update(
       {
         balance_pending_amount: balance.pending[0].amount,
@@ -281,21 +204,9 @@ const getAccountBalance = async (req, res) => {
         returning: true,
         plain: true
       })
-    //   .then(({ pending }) => (
-    // {
-    //   pending: pending[0].amount,
-    // }
 
     console.log("BALANCE ===>", updatedStripeBalance[1].dataValues);
-    // res.send(balance)
     res.json(updatedStripeBalance[1])
-    // res.json({ available: balance.available, pending: balance.pending });
-    // res.json(
-    //   {
-    //     balance_pending_amount: balance.pending[0].amount,
-    //     balance_pending_curr: balance.pending[0].currency
-    //   })
-    // res.status(200).send(balance)
   } catch (err) {
     console.log(err);
     res.status(500).send(err)
@@ -306,7 +217,6 @@ const getAccountBalance = async (req, res) => {
 const getPayoutSetting = async (req, res) => {
   try {
     const user = req.user
-    // const user = await userModel.findById(req.user._id).exec();
     const loginLink = await stripe.accounts.createLoginLink(
       user.stripe_account_id,
       {
@@ -316,7 +226,6 @@ const getPayoutSetting = async (req, res) => {
     console.log("LOGIN LINK FOR PAYOUT SETTING", loginLink);
     res.json(loginLink);
   } catch (err) {
-    // console.log("STRIPE PAYOUT SETTING ERR ", err);
     console.log("STRIPE PAYOUT SETTING ERR ", err.raw.message);
     err.raw.message ? res.status(500).send(err.raw.message) : err
   }
@@ -324,9 +233,7 @@ const getPayoutSetting = async (req, res) => {
 
 const testAccountBalance = async (req, res) => {
   const user = req.user
-  // const user = await userModel.findById(req.user._id)
   try {
-    //how to define schema for array of objects???
     console.log('updatedStripeBalance');
     const updated = await db.StripeData.update(
       {
@@ -352,10 +259,8 @@ const stripeSuccess = async (req, res) => {
     // 1 get product id from req.body
     const { productId } = req.body;
     // 2 find currently logged in user
-
     // check if user has stripeSession
     // if (!user.stripeSession) return;
-
     // 3 retrieve stripe session, based on session id we previously save in user db
     const session = await stripe.checkout.sessions.retrieve(
       user.stripe_session_id
@@ -396,9 +301,7 @@ const stripeSuccess = async (req, res) => {
 
 module.exports = { createConnectAccount, createSessionId, getAccountStatus, getAccountBalance, getPayoutSetting, testAccountBalance, stripeSuccess }
 
-
-
-// {
+// res from stripe sessionId
 //   id: 'cs_test_a1aUqO2yl3RqF7IO43pjhiTOGiMvvsluIOHQJUUN1SxU92lClX2Be4n6gL',
 //   object: 'checkout.session',
 //   allow_promotion_codes: null,
@@ -428,4 +331,3 @@ module.exports = { createConnectAccount, createSessionId, getAccountStatus, getA
 //   success_url: 'http://localhost:3000/stripe/success',
 //   total_details: { amount_discount: 0, amount_shipping: 0, amount_tax: 0 },
 //   url: 'https://checkout.stripe.com/pay/cs_test_a1aUqO2yl3RqF7IO43pjhiTOGiMvvsluIOHQJUUN1SxU92lClX2Be4n6gL#fidkdWxOYHwnPyd1blpxYHZxWmxuYVZWRG5tc3RLRDBDRlZVQVJgYDNQMicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl'
-// }

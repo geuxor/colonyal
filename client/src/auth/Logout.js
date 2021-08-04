@@ -11,7 +11,6 @@ export const useLogOut = () => {
   const dispatch = useDispatch();
   const logoutUser = async () => {
     try {
-      // console.log("logged out?-----------------");
       delete_cookie();
       dispatch({
         type: "LOGOUT",

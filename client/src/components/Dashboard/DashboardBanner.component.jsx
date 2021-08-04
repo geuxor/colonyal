@@ -18,10 +18,9 @@ const DashboardBanner = () => {
     console.log("checking account balance for", store);
     if (store.loggedIn & (store.email !== "")) {
       let res = await apiStripe.getAccountBalance(store);
-      console.log("*****fetching account balance", res); //updatedStripeBalance
+      console.log("*****fetching account balance", res);
       dispatch({
         type: "LOGGED_IN_USER",
-        // payload: { balance: { ...res.data } },
         payload: { stripe: { ...res.data } },
       });
       setBalance({
@@ -32,9 +31,6 @@ const DashboardBanner = () => {
         balance_pending_amount: res.data.balance_pending_amount,
         balance_pending_curr: res.data.balance_pending_curr,
       });
-      // balance.pending.map((bp, i) => (
-      //   console.log(apiStripe.currencyFormatter(bp))
-      // ))
     }
   };
 
@@ -45,10 +41,6 @@ const DashboardBanner = () => {
       console.log("res = one time stripe payout settings link ", res);
       window.location.href = res.data.url;
       setLoading(false);
-      // dispatch({
-      //   type: "LOGGED_IN_USER",
-      //   payload: { email: res.data },
-      // });
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -109,18 +101,3 @@ const DashboardBanner = () => {
 };
 
 export default DashboardBanner;
-
-// balance.pending.map((bp, i) => (
-//   <span key={i} className="lead">
-//     {currencyFormatter(bp)}
-//   </span>
-
-              // {
-              //   store.balance &&
-              //     store.balance.pending &&
-              //     store.balance.pending.map((bp, i) => (
-              //       <span key={i} className="lead">
-              //         {apiStripe.currencyFormatter(bp)}
-              //       </span>
-              //     ));
-              // }

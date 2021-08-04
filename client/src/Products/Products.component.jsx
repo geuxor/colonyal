@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import SmallCard from "../components/Design/SmallCard.component"
 import DesignCard from "../components/Design/Card.component";
 import DesignCarousel from "../components/Design/Carousel.component";
 import apiProduct from "../ApiService/products";
-// import { useSelector } from "react-redux";
 
 function Products(props) {
-  // const { auth } = useSelector((state) => ({...state}))
-  //  JSON.stringify(auth.user._id);
-
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -21,8 +16,6 @@ function Products(props) {
     setProducts(res.data);
     console.log("-------", products);
   };
-
- 
 
   return (
     <div>
@@ -43,7 +36,3 @@ function Products(props) {
 }
 
 export default Products;
-//        <SmallCard key={p.id} p={p} />
-///* <pre>{JSON.stringify(hotels, null, 4)}</pre> */
-// https://res.cloudinary.com/geuxor/image/upload/v1627985094/colonyal/fh5gkejpsivdubdnqbtq.png
-// https://res.cloudinary.com/geuxor/image/upload/v1619727653/colonyal/zzep4nf8eqxelx5j7owkrrbnefdw.jpg

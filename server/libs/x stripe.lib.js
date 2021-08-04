@@ -1,8 +1,4 @@
-//initialize the Stripe client for backend
-// const axios = require('axios');
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
-
 
 async function createConnectedAccount() {
   console.log('entering stripe api - createConnectedAccount');
@@ -21,7 +17,6 @@ async function createConnectedAccount() {
     return 'error'
   }
 }
-
 
 async function getSessionId(req, res) {
   console.log('index getsessionid', req.body)

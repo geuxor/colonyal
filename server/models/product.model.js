@@ -1,4 +1,3 @@
-
 console.log('model:                       🙋‍♂️ entering product.model');
 
 function ProductModel(seq, types) {
@@ -6,18 +5,18 @@ function ProductModel(seq, types) {
   const Product = seq.define('Product', {
     title: {
       type: types.STRING,
-      // allowNull: false,
+      allowNull: false,
     },
     description: {
       type: types.STRING,
-      // allowNull: false
+      allowNull: false
     },
     location: {
       type: types.STRING,
     },
     price: {
       type: types.INTEGER,
-      // allowNull: false
+      allowNull: false
     },
     image: {
       type: types.STRING,
@@ -33,10 +32,9 @@ function ProductModel(seq, types) {
     },
     timestamps: types.DATE
   },
-   {
-     
-  });
-  //???
+    {
+
+    });
   Product.associate = function (models) {
     Product.belongsTo(models.User);
   };

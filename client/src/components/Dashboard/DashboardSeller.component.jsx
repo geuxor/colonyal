@@ -7,17 +7,13 @@ import { toast } from "react-toastify";
 import DashboardBanner from "./DashboardBanner.component";
 import DashboardNav from "./DashboardNav.component";
 import DesignSpin from "../Design/Spin.component";
-// import MyProducts from './DashboardProducts.component';
 
 const DashboardSeller = () => {
   const dispatch = useDispatch();
-
-  // const store = useSelector((state) => state);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     //if user is logged in run accountStatus
-    //  if (auth && auth.token) accountStatus();
     //read cookie
     //if cookie is there
     // send a login req
@@ -59,9 +55,7 @@ const DashboardSeller = () => {
     try {
       // get stripe onboarding link
       console.log("gettin stripe onboarding link", store.user);
-
       let res = await apiStripe.stripeConnectAccount(store.user);
-      //why is res undefined?
       console.log("res from stripconxacc", res.data);
       window.location.href = res.data;
     } catch (err) {
@@ -140,11 +134,9 @@ const DashboardSeller = () => {
       <div className="container-fluid bg-secondary p-3">
         <DashboardBanner />
       </div>
-
       <div className="container-fluid p-1">
         <DashboardNav />
       </div>
-
       <div className="container-fluid p-3">
         {loading ? (
           <DesignSpin message={"just a few seconds to check your stripe account..."} />

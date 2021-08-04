@@ -1,5 +1,4 @@
 export function get_cookie() {
-  // console.log("document.cookie=>", document.cookie);
   return document.cookie.split(';').some(c => {
     return c.trim().startsWith(process.env.REACT_APP_KUK + '=');
   });
@@ -16,8 +15,5 @@ export function check_cookie() {
     return c.trim().startsWith(process.env.REACT_APP_KUK + '=')
   })
 
-  // const res = await apiAuth.loginUser(sid)
-  // console.log('res', res)
   return sid
-
 }

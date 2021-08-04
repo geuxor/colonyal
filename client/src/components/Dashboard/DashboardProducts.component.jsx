@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import SmallCard from "../../components/Design/SmallCard.component";
-// import DesignCard from "../components/Design/Card.component";
-// import DesignCarousel from "../components/Design/Carousel.component";
 import apiProduct from "../../ApiService/products"
-// import { useSelector } from "react-redux";
 
 function MyProducts(props) {
-  // const { auth } = useSelector((state) => ({...state}))
-  //  JSON.stringify(auth.user._id);
-
   const [myproducts, setMyproducts] = useState([]);
 
   useEffect(() => {
@@ -41,5 +35,3 @@ function MyProducts(props) {
 }
 
 export default MyProducts;
-
-///* <pre>{JSON.stringify(hotels, null, 4)}</pre> */

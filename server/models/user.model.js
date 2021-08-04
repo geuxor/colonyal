@@ -6,7 +6,7 @@ function UserModel(seq, types) {
     email: {
       type: types.STRING,
       allowNull: false,
-      unique: true, //unique: email
+      unique: true,
       isEmail: {
         msg: "Must be an email"
       },
@@ -39,19 +39,6 @@ function UserModel(seq, types) {
     avatar: {
       type: types.STRING
     },
-    // stripe_account_id: {
-    //   type: types.STRING,
-    //   unique: true
-    // },
-    // product_id: {
-    //   type: types.ARRAY(types.INTEGER)
-    // },
-    // stripe_seller: {
-    //   type: types.STRING
-    // },
-    // stripe_charges_enabled: {
-    //   type: types.STRING
-    // },
     stripe_session_id: {
       type: types.STRING
     },
@@ -59,7 +46,6 @@ function UserModel(seq, types) {
       type: types.BOOLEAN
     },
     timestamps: types.DATE
-    // Sequelize.ENUM('value 1', 'value 2')
   }, {
     // {
     //   validate: {
@@ -80,17 +66,4 @@ function UserModel(seq, types) {
   return User
 }
 
-// {
-//   foreignKey: 'stripe_account_id'
-// // }
-
 module.exports = UserModel
-
-// associate: (models) => {
-//   User.hasOne(models.Stripe, {
-//     foreignKey: 'stripe_acct_id',
-//   })
-// // },
-//   , {
-//   foreignKey: 'created_by'
-// }

@@ -26,12 +26,8 @@ import StripeSuccess from './components/Stripe/StripeSuccess.component'
 import StripeFailure from './components/Stripe/StripeFailure.component'
 
 function App() {
-  // const user = useSelector((state) => state.user);
-  // const [{ user, isLoggedIn }, dispatch] = useStateValue();
-  // console.log('user is', user);
   const [isLoading, setIsLoading] = useState(true)
   const dispatch = useDispatch();
-  // const history = useHistory();
 
   useEffect(() => {
     (async () => {
@@ -43,7 +39,6 @@ function App() {
           console.log("App: profile response:", res.data);
           if (res.data) {
             console.log("App: reLoggedIn SUCCESSFULL ===> ");
-            // save log in state to redux
             dispatch({
               type: "LOGGED_IN_USER",
               payload: { user: res.data },
@@ -54,7 +49,6 @@ function App() {
           }
           setIsLoading(false)
         } else {
-          // history.push("/login");
           setIsLoading(false)
         }
       } catch (err) {
@@ -105,89 +99,3 @@ function App() {
 }
 
 export default App;
-// {/* <Navbar isAuthenticated={isAuthenticated} /> */ }
-// {/* <PrivateRoute exact path="/admin" component={Admin} /> */ }
-// {/* <Route exact path="/admin" component={Admin} /> */}
-
-  // const initialState = auth.isAuthenticated();
-  // const [isAuthenticated, setIsAuthenticated] = useState({
-  //   status: 'pending',
-  //   error: null,
-  //   user: null,
-  // })
-
-  // async function getStatus(user) {
-  //   console.log('getting status');
-
-  //   try {
-  //     let res = await apiAuth.loginUser(user);
-  //     console.log("login response", res);
-  //     // if (res.data && res.data === email) {
-  //     //   console.log("LOGGIN SUCCESSFULL ===> ");
-  //     //   console.log(res.data);
-  //     // }
-  //     setIsAuthenticated({ status: 'success', error: null, user })
-  //   } catch (error) {
-  //     console.log(error);
-  //     setIsAuthenticated({ status: 'error', error, user: null })
-  //     // if (error.response && error.response.status >= 400) toast.error(error.response.data);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getStatus()
-  // }, [])
-//{/* <Route exact path="/logout" component={Logout} /> */ }
-
-
-//separate useEffect to a new function
-// import { StatusCheck } from "./auth/StatusCheck"
-// import Cloudinary from './components/Cloudinary';
-// import Products from './Products/Products.component';
-// (async () => {
-//   try {
-//     const status = await StatusCheck()
-//     console.log('###', status);
-//     setIsLoading(status)
-//   } catch (err) {
-//     console.log(err);
-//     setIsLoading(false)
-//     if (err.response && err.response.status >= 400)
-//       toast.error(err.response.data);
-//   }
-// })()
-
-
-
-// useEffect(() => {
-//   (async () => {
-//     try {
-//       const sid = get_cookie();
-//       console.log("App: cookie:", sid);
-//       if (sid) {
-//         let res = await apiAuth.getProfile();
-//         console.log("App: profile response:", res.data);
-//         if (res.data) {
-//           console.log("App: reLoggedIn SUCCESSFULL ===> ");
-//           // save log in state to redux
-//           dispatch({
-//             type: "LOGGED_IN_USER",
-//             payload: { user: res.data },
-//           });
-//         } else {
-//           console.log('App: err relogging - redirect to login')
-//           toast.error("App: Error reLogging you in - Please relogin");
-//         }
-//         setIsLoading(false)
-//       } else {
-//         // history.push("/login");
-//         setIsLoading(false)
-//       }
-//     } catch (err) {
-//       console.log(err);
-//       setIsLoading(false)
-//       if (err.response && err.response.status >= 400)
-//         toast.error(err.response.data);
-//     }
-//   })();
-// }, [dispatch]);
