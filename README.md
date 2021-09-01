@@ -103,7 +103,6 @@ It's very easy to register as a provider, and you can start creating new product
 ## Contributors ✨
 
 ![ForTheBadge built-with-love by](https://forthebadge.com/images/badges/built-with-love.svg) 
-![💝 ](https://allcontributors.org/docs/en/emoji-key)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
