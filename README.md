@@ -18,7 +18,6 @@
 [Colonyal](#colonyal)  
 [Tech Stack](#tech-stack)  
 [Running colonyal](#running-colonyal)  
-[Architecture](#architecture)
 [Observations](#observations)  
 [Developers Team](#developers-team)  
 [Contributors](#contributors-✨)
@@ -90,9 +89,6 @@ It's very easy to register as a provider, and you can start creating new product
 - With the database running, run `npm run recreateDb`. This will generate the tables in the database and seed the data to get the project started.
 - Run `nodemon` in colonyal/server directory
 
-## Architecture
-(coming soon...)
-
 ## Observations
 
 ##### Upcoming Pull Requests
@@ -100,7 +96,7 @@ It's very easy to register as a provider, and you can start creating new product
 - Deploy colonyal to the web
 - Create PWA 
 
-## Developer, Designer and PM
+## Engineering, Design and PM
 
 😋  German - [Github](https://github.com/geuxor) - [LinkedIn](https://www.linkedin.com/in/german-b)\
 
