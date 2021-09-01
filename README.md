@@ -98,7 +98,7 @@ It's very easy to register as a provider, and you can start creating new product
 
 ## Engineering, Design and PM
 
-😋  German - [Github](https://github.com/geuxor) - [LinkedIn](https://www.linkedin.com/in/german-b)\
+😋  German - [Github](https://github.com/geuxor) - [LinkedIn](https://www.linkedin.com/in/german-b)
 
 ## Contributors ✨
 
