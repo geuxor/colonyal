@@ -1,9 +1,9 @@
 # Colonyal - 
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 
 > Front and Backend files for Colonyal WebApp. ([colonyal](https://github.com/geuxor/colonyal)  )
 
+[![Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors)
 [![GitHub license](https://img.shields.io/github/license/geuxor/colonyal)](https://github.com/geuxor/colonyal/blob/develop/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/geuxor/colonyal)](https://github.com/geuxor/colonyal/releases/tag/0.9.0)
 [![GitHub issues](https://img.shields.io/github/issues/geuxor/colonyal)](https://GitHub.com/geuxor/colonyal/issues)
