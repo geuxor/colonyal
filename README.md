@@ -38,19 +38,9 @@ The App is a P2P Community Marketplace connecting providers that wish to sell pr
 It allows a community of expats to be created through events, news, blogposts and also help individuals to find jobs, places to stay and much more. 
 Experience a new world with Colonyal!
 
-<p align="center">
- <img src="./readmeFiles/back500.png" style="zoom:20%;" >
-</p>
-
 Once you're logged in you can browse through different products, make a purchase, browser events, and news articles - You will discover many type of local products offered by different providers, with the ability to pay for postage for delivery. 
 
 It's very easy to register as a provider, and you can start creating new products in no-time. As a provider you decide the price, delivery method, etc. Buyers will soon be booking your product and you can start obtaining additional revenue in an automated manner.
-
-## Teaser
-
-Checkout a video demo of the app on [YouTube](https://www.youtube.com/watch?v=):
-
-[![Watch the video](https://img.youtube.com/)](https://youtu.be/)
 
 ## Tech Stack
 
