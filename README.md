@@ -1,4 +1,4 @@
-# Colonyal - ![ForTheBadge built-with-love](https://forthebadge.com/images/badges/built-with-love.svg)
+# Colonyal -
 
 
 **Front and Backend files for Colonyal WebApp. ([colonyal](https://github.com/geuxor/colonyal))**
@@ -106,7 +106,7 @@ It's very easy to register as a provider, and you can start creating new product
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([💝 ](https://allcontributors.org/docs/en/emoji-key)):
+![ForTheBadge built-with-love](https://forthebadge.com/images/badges/built-with-love.svg) by ([💝 ](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
