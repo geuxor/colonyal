@@ -1,7 +1,8 @@
 # Colonyal - 
 
 
-> Front and Backend files for Colonyal WebApp. ([colonyal](https://github.com/geuxor/colonyal)  )
+> Front and Backend files for Colonyal WebApp. ([colonyal](https://github.com/geuxor/colonyal)  )\
+
 
 [![Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors)
 [![GitHub license](https://img.shields.io/github/license/geuxor/colonyal)](https://github.com/geuxor/colonyal/blob/develop/LICENSE)
