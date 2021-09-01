@@ -17,7 +17,6 @@
 ## Table of contents
 
 [Colonyal](#colonyal)  
-[Teaser](#teaser)  
 [Tech Stack](#tech-stack)  
 [Running colonyal](#running-colonyal)  
 [Architecture](#architecture)
