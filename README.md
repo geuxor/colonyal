@@ -8,8 +8,7 @@
 [![GitHub license](https://img.shields.io/github/license/geuxor/colonyal)](https://github.com/geuxor/colonyal/blob/develop/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/geuxor/colonyal)](https://github.com/geuxor/colonyal/releases/tag/0.9.0)
 [![GitHub issues](https://img.shields.io/github/issues/geuxor/colonyal)](https://GitHub.com/geuxor/colonyal/issues)
-
-<span align="center">![ForTheBadge built-with-love](https://forthebadge.com/images/badges/built-with-love.svg)</span>
+[![ForTheBadge built-with-love](https://forthebadge.com/images/badges/built-with-love.svg)]
 
 <p align="center">
  <img src="./readmeFiles/logo-small.png" alt="colonyal logo" style="zoom:40%;" >
